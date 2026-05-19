@@ -1,0 +1,39 @@
+---
+import Icon from './Icon.astro';
+
+import type { SocialLink } from '../../lib/site-content';
+
+interface Props {
+  links: SocialLink[];
+  listClass?: string;
+  linkClass?: string;
+  iconClass?: string;
+}
+
+const {
+  links,
+  listClass = 'flex flex-wrap gap-3',
+  linkClass = 'inline-flex size-10 items-center justify-center rounded-full border border-(--border-muted) no-underline transition hover:border-(--color-primary) hover:text-(--color-heading)',
+  iconClass = 'size-5',
+} = Astro.props;
+---
+
+<ul class={listClass}>
+  {
+    links.map((link) => (
+      <li>
+        <a
+          href={link.href}
+          target="_blank"
+          rel="noreferrer"
+          aria-label={link.label}
+          title={link.label}
+          class={linkClass}
+        >
+          <Icon name={link.icon} class={iconClass} />
+          <span class="sr-only">{link.label}</span>
+        </a>
+      </li>
+    ))
+  }
+</ul>

@@ -1,7 +1,13 @@
 ---
 import '../styles/global.css';
 
-import { getLocalizedPath, type Locale } from '../lib/i18n';
+import {
+  getLocaleFromPathname,
+  getLocalizedPath,
+  localizePathname,
+  stripLocaleFromPathname,
+  type Locale,
+} from '../lib/i18n';
 import { site } from '../lib/site';
 
 interface Props {
@@ -20,6 +26,10 @@ const {
 
 const pageTitle = title ? `${title} | ${site.name}` : site.name;
 const canonical = new URL(canonicalPath, site.url).toString();
+const basePath = stripLocaleFromPathname(canonicalPath);
+const hasLocalizedAlternates = getLocaleFromPathname(canonicalPath) !== null;
+const alternateEn = new URL(localizePathname(basePath, 'en'), site.url).toString();
+const alternateZh = new URL(localizePathname(basePath, 'zh'), site.url).toString();
 ---
 
 <!doctype html>
@@ -30,7 +40,17 @@ const canonical = new URL(canonicalPath, site.url).toString();
     <meta name="generator" content={Astro.generator} />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
+    <meta name="theme-color" content="#f9f9f9" />
     <link rel="canonical" href={canonical} />
+    {
+      hasLocalizedAlternates && (
+        <>
+          <link rel="alternate" hreflang="en" href={alternateEn} />
+          <link rel="alternate" hreflang="zh" href={alternateZh} />
+          <link rel="alternate" hreflang="x-default" href={alternateEn} />
+        </>
+      )
+    }
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <script is:inline>
       (() => {
@@ -40,11 +60,32 @@ const canonical = new URL(canonicalPath, site.url).toString();
 
         const getStoredTheme = () => window.localStorage.getItem(storageKey) ?? 'system';
 
+        const syncThemeButtons = () => {
+          const toggleButtons = document.querySelectorAll('[data-theme-toggle]');
+          const isDark = root.classList.contains('dark');
+
+          for (const button of toggleButtons) {
+            const label = isDark
+              ? (button.getAttribute('data-theme-label-dark') ?? 'Switch to light mode')
+              : (button.getAttribute('data-theme-label-light') ?? 'Switch to dark mode');
+
+            button.setAttribute('aria-label', label);
+            button.setAttribute('title', label);
+            button.setAttribute('aria-pressed', String(isDark));
+
+            const srText = button.querySelector('[data-theme-toggle-text]');
+            if (srText) {
+              srText.textContent = label;
+            }
+          }
+        };
+
         const applyTheme = (theme) => {
           const shouldUseDark = theme === 'dark' || (theme === 'system' && media.matches);
 
           root.classList.toggle('dark', shouldUseDark);
           root.dataset.theme = theme;
+          syncThemeButtons();
         };
 
         const registerToggle = () => {
@@ -57,6 +98,8 @@ const canonical = new URL(canonicalPath, site.url).toString();
               applyTheme(nextTheme);
             });
           }
+
+          syncThemeButtons();
         };
 
         applyTheme(getStoredTheme());
@@ -73,10 +116,8 @@ const canonical = new URL(canonicalPath, site.url).toString();
       })();
     </script>
   </head>
-  <body
-    class="min-h-screen bg-white text-slate-950 antialiased dark:bg-slate-950 dark:text-slate-100"
-  >
-    <main class="mx-auto flex min-h-screen w-full max-w-4xl flex-col px-6 py-12 sm:px-8">
+  <body class="min-h-screen bg-(--color-page) text-(--color-default) antialiased">
+    <main class="mx-auto flex min-h-screen w-full max-w-6xl flex-col px-6 py-8 sm:px-8 lg:px-10">
       <slot />
     </main>
   </body>

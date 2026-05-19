@@ -1,0 +1,77 @@
+---
+import {
+  getAlternateLocale,
+  getAlternatePathname,
+  getLocalizedPath,
+  getLocaleFromPathname,
+  type Locale,
+} from '../../lib/i18n';
+import { getPrimaryNavigation, siteContent } from '../../lib/site-content';
+import { site } from '../../lib/site';
+
+import ThemeToggle from './ThemeToggle.astro';
+
+interface Props {
+  locale: Locale;
+  pathname: string;
+}
+
+const { locale, pathname } = Astro.props;
+const nav = getPrimaryNavigation(locale);
+const labels = siteContent[locale].nav;
+const localeHref = getLocaleFromPathname(pathname)
+  ? getAlternatePathname(pathname, locale)
+  : getLocalizedPath(getAlternateLocale(locale));
+
+const isActive = (href: string): boolean => {
+  if (href === `/${locale}/`) {
+    return pathname === href;
+  }
+
+  return pathname.startsWith(href);
+};
+---
+
+<header class="border-b border-(--border-muted) pb-6">
+  <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+    <div class="space-y-2">
+      <a href={`/${locale}/`} class="inline-flex items-center gap-3 no-underline">
+        <span class="font-heading text-lg tracking-[0.22em] text-(--color-heading)">
+          {site.name}
+        </span>
+      </a>
+      <p class="max-w-2xl text-sm leading-6 text-(--color-muted)">{site.tagline}</p>
+    </div>
+
+    <div class="flex flex-col gap-4 lg:items-end">
+      <nav aria-label="Primary" class="flex flex-wrap gap-2 text-sm">
+        {
+          nav.map((item) => (
+            <a
+              href={item.href}
+              class:list={[
+                'rounded-full border px-3 py-1.5 no-underline transition',
+                isActive(item.href)
+                  ? 'border-(--color-primary) bg-(--color-primary)/10 text-(--color-heading)'
+                  : 'border-(--border-muted) text-(--color-muted) hover:border-(--color-primary) hover:text-(--color-heading)',
+              ]}
+              aria-current={isActive(item.href) ? 'page' : undefined}
+            >
+              {item.label}
+            </a>
+          ))
+        }
+      </nav>
+
+      <div class="flex items-center gap-3 text-sm">
+        <a
+          href={localeHref}
+          class="rounded-full border border-(--border-muted) px-3 py-1.5 no-underline transition hover:border-(--color-primary) hover:text-(--color-heading)"
+        >
+          {labels.switchLocale}
+        </a>
+        <ThemeToggle lightLabel={labels.toggleThemeToDark} darkLabel={labels.toggleThemeToLight} />
+      </div>
+    </div>
+  </div>
+</header>

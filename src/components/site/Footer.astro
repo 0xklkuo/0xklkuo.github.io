@@ -1,0 +1,38 @@
+---
+import { type Locale } from '../../lib/i18n';
+import { getLegalNavigation, siteContent, socialLinks } from '../../lib/site-content';
+import { site } from '../../lib/site';
+
+import SocialLinks from './SocialLinks.astro';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const legalLinks = getLegalNavigation(locale);
+const footer = siteContent[locale].footer;
+---
+
+<footer class="mt-20 border-t border-(--border-muted) pt-8 text-sm text-(--color-muted)">
+  <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+    <div class="space-y-3">
+      <p class="font-heading text-(--color-heading)">{site.name}</p>
+      <p class="max-w-xl leading-6">{site.description}</p>
+      <p>{footer.rights}</p>
+    </div>
+
+    <div class="grid gap-4 md:text-right">
+      <nav aria-label="Legal" class="flex flex-wrap gap-3 md:justify-end">
+        {
+          legalLinks.map((item) => (
+            <a href={item.href} class="no-underline hover:text-(--color-heading)">
+              {item.label}
+            </a>
+          ))
+        }
+      </nav>
+      <SocialLinks links={socialLinks} listClass="flex flex-wrap gap-3 md:justify-end" />
+    </div>
+  </div>
+</footer>

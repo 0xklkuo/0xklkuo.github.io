@@ -1,0 +1,34 @@
+---
+import SiteLayout from './SiteLayout.astro';
+import { type Locale } from '../lib/i18n';
+
+interface Frontmatter {
+  locale: Locale;
+  title: string;
+  description?: string;
+  subtitle?: string;
+}
+
+const { frontmatter } = Astro.props;
+const { locale, title, description, subtitle } = frontmatter as Frontmatter;
+---
+
+<SiteLayout
+  locale={locale}
+  title={title}
+  description={description}
+  canonicalPath={Astro.url.pathname}
+>
+  <article class="content-body mx-auto w-full max-w-3xl">
+    <header class="mb-10 space-y-4 border-b border-(--border-muted) pb-8">
+      <p class="text-sm font-semibold uppercase tracking-[0.24em] text-(--color-primary)">
+        {locale === 'en' ? 'Page' : '頁面'}
+      </p>
+      <h1 class="font-heading text-4xl leading-tight text-(--color-heading) sm:text-5xl">
+        {title}
+      </h1>
+      {subtitle && <p class="text-lg leading-8 text-(--color-muted)">{subtitle}</p>}
+    </header>
+    <slot />
+  </article>
+</SiteLayout>

@@ -1,0 +1,28 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  lightLabel: string;
+  darkLabel: string;
+}
+
+const { lightLabel, darkLabel } = Astro.props;
+---
+
+<button
+  type="button"
+  data-theme-toggle
+  data-theme-label-light={lightLabel}
+  data-theme-label-dark={darkLabel}
+  aria-label={lightLabel}
+  title={lightLabel}
+  class="inline-flex size-10 items-center justify-center rounded-full border border-(--border-muted) transition hover:border-(--color-primary) hover:text-(--color-heading)"
+>
+  <span class="dark:hidden">
+    <Icon name="moon" class="size-5" />
+  </span>
+  <span class="hidden dark:inline-flex">
+    <Icon name="sun" class="size-5" />
+  </span>
+  <span class="sr-only" data-theme-toggle-text>{lightLabel}</span>
+</button>

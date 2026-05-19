@@ -67,7 +67,7 @@ Refactor `klkuo.guru` into a minimal, pure static personal site that is easy to 
 - Core docs exist and record the decisions above.
 - `format`, `lint`, `check`, `test`, and `build` scripts exist and pass.
 
-### Milestone 2: Site shell and i18n
+### Milestone 2: Site Shell and I18n
 
 - Reusable layout, navigation, and footer are in place.
 - `en` and `zh` static pages render from the new shell.
@@ -79,7 +79,7 @@ Refactor `klkuo.guru` into a minimal, pure static personal site that is easy to 
 - Existing slugs are preserved where practical.
 - Metadata, sitemap, and canonical URL behavior are verified.
 
-### Milestone 4: Analytics and deployment
+### Milestone 4: Analytics and Deployment
 
 - Umami is integrated cleanly.
 - GitHub Actions deploy the site to GitHub Pages.

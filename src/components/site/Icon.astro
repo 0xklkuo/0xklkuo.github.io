@@ -1,0 +1,29 @@
+---
+import { icons as tablerIcons } from '@iconify-json/tabler';
+
+import type { SocialIconName } from '../../lib/site-content';
+
+type IconName = SocialIconName | 'moon' | 'sun';
+
+interface Props {
+  name: IconName;
+  class?: string;
+}
+
+const { name, class: className = 'size-5' } = Astro.props;
+const icon = tablerIcons.icons[name];
+
+if (!icon) {
+  throw new Error(`Unknown icon: ${name}`);
+}
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 24 24"
+  fill="none"
+  class={className}
+  aria-hidden="true"
+  focusable="false"
+  set:html={icon.body}
+/>

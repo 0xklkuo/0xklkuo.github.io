@@ -4,12 +4,13 @@ Minimal static personal site for KL KUO.
 
 ## Status
 
-Milestone 1 establishes the rewrite foundation:
+Milestones 1 and 2 are in place:
 
 - AstroWind-era dynamic code has been removed.
 - The project now builds as a pure static Astro site.
 - Tailwind CSS v4 is installed through the official Vite plugin.
 - TypeScript v5, ESLint, Prettier, Astro checks, and Vitest are wired into the baseline workflow.
+- A reusable site shell now powers locale-aware home and MDX pages.
 - Core decisions are documented before feature work continues.
 
 ## Core Decisions

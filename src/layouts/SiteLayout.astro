@@ -1,0 +1,23 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Header from '../components/site/Header.astro';
+import Footer from '../components/site/Footer.astro';
+import { type Locale } from '../lib/i18n';
+
+interface Props {
+  locale: Locale;
+  title?: string;
+  description?: string;
+  canonicalPath?: string;
+}
+
+const { locale, title, description, canonicalPath = Astro.url.pathname } = Astro.props;
+---
+
+<BaseLayout locale={locale} title={title} description={description} canonicalPath={canonicalPath}>
+  <Header locale={locale} pathname={canonicalPath} />
+  <div class="flex-1 py-12">
+    <slot />
+  </div>
+  <Footer locale={locale} />
+</BaseLayout>

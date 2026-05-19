@@ -1,12 +1,46 @@
+@import '@fontsource-variable/aleo/wght.css';
+@import '@fontsource-variable/kode-mono/wght.css';
+@import '@fontsource-variable/noto-serif-tc/wght.css';
+@import '@fontsource/inknut-antiqua/latin.css';
+@import '@fontsource/lxgw-wenkai-tc/chinese-traditional.css';
 @import 'tailwindcss';
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
+  --color-page: #f9f9f9;
+  --color-default: #1f1f1f;
+  --color-heading: #000000;
+  --color-muted: #6b6b6b;
+  --color-primary: #dd1f1f;
+  --color-secondary: #daa777;
+  --color-accent: #bf8f8f;
+  --border-muted: color-mix(in srgb, var(--color-default) 14%, transparent);
+  --surface-soft: color-mix(in srgb, var(--color-page) 92%, var(--color-secondary) 8%);
+  --surface-strong: color-mix(in srgb, var(--color-page) 86%, var(--color-accent) 14%);
+  --font-sans: 'Aleo Variable', 'LXGW WenKai TC', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Noto Serif TC Variable', ui-serif, Georgia, serif;
+  --font-heading: 'Inknut Antiqua', 'Noto Serif TC Variable', Georgia, serif;
+  --font-mono: 'Kode Mono Variable', ui-monospace, SFMono-Regular, monospace;
   color-scheme: light;
 }
 
+html:lang(zh) {
+  --font-sans: 'LXGW WenKai TC', 'Aleo Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-heading: 'Noto Serif TC Variable', 'Inknut Antiqua', Georgia, serif;
+}
+
 :root.dark {
+  --color-page: #1f1f1f;
+  --color-default: #f9f9f9;
+  --color-heading: #ffffff;
+  --color-muted: #b2b2b2;
+  --color-primary: #dd1f1f;
+  --color-secondary: #daa777;
+  --color-accent: #bf8f8f;
+  --border-muted: color-mix(in srgb, var(--color-default) 18%, transparent);
+  --surface-soft: color-mix(in srgb, var(--color-page) 90%, white 10%);
+  --surface-strong: color-mix(in srgb, var(--color-page) 82%, var(--color-accent) 18%);
   color-scheme: dark;
 }
 
@@ -15,19 +49,86 @@ html {
 }
 
 body {
-  font-family:
-    ui-sans-serif,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    sans-serif;
+  font-family: var(--font-sans);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+}
+
+code,
+pre {
+  font-family: var(--font-mono);
 }
 
 a {
+  color: inherit;
+  text-decoration-thickness: 0.08em;
   text-underline-offset: 0.2em;
 }
 
+a:hover {
+  color: var(--color-primary);
+}
+
 ::selection {
-  background: rgb(56 189 248 / 0.35);
+  background: color-mix(in srgb, var(--color-primary) 24%, transparent);
+}
+
+.content-body {
+  line-height: 1.85;
+}
+
+.content-body > * + * {
+  margin-top: 1.25rem;
+}
+
+.content-body h2,
+.content-body h3,
+.content-body h4 {
+  margin-top: 2.5rem;
+  color: var(--color-heading);
+}
+
+.content-body h2 {
+  font-size: clamp(1.75rem, 2vw, 2.25rem);
+}
+
+.content-body h3 {
+  font-size: clamp(1.35rem, 1.6vw, 1.75rem);
+}
+
+.content-body p,
+.content-body li,
+.content-body blockquote {
+  color: var(--color-default);
+}
+
+.content-body ul,
+.content-body ol {
+  padding-left: 1.5rem;
+}
+
+.content-body li + li {
+  margin-top: 0.5rem;
+}
+
+.content-body blockquote {
+  border-left: 4px solid var(--color-secondary);
+  padding-left: 1rem;
+  color: var(--color-muted);
+  font-style: italic;
+}
+
+.content-body img {
+  border-radius: 1.5rem;
+}
+
+.content-body hr {
+  border-color: var(--border-muted);
 }
