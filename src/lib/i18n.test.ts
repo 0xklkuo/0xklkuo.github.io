@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  LOCALES,
+  assertLocale,
   getAlternateLocale,
   getAlternatePathname,
   getLocaleFromPathname,
@@ -39,8 +41,11 @@ describe('i18n helpers', () => {
   });
 
   it('validates and flips locales', () => {
+    expect(LOCALES).toEqual(['en', 'zh']);
     expect(isLocale('en')).toBe(true);
     expect(isLocale('jp')).toBe(false);
+    expect(assertLocale('zh')).toBe('zh');
+    expect(() => assertLocale('jp')).toThrow(/supported locale/i);
     expect(getAlternateLocale('en')).toBe('zh');
     expect(getAlternateLocale('zh')).toBe('en');
     expect(getAlternatePathname('/en/about/', 'en')).toBe('/zh/about/');

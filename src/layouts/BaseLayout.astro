@@ -9,7 +9,7 @@ import {
   stripLocaleFromPathname,
   type Locale,
 } from '../lib/i18n';
-import { site } from '../lib/site';
+import { localeMetadata, site } from '../lib/site';
 
 type AlternateLinks = Partial<Record<Locale, string>>;
 
@@ -50,24 +50,34 @@ const canonical = new URL(canonicalPath, site.url).toString();
 const basePath = stripLocaleFromPathname(canonicalPath);
 const hasLocalizedAlternates = getLocaleFromPathname(canonicalPath) !== null;
 const defaultAlternates = hasLocalizedAlternates
-  ? {
-      en: new URL(localizePathname(basePath, 'en'), site.url).toString(),
-      zh: new URL(localizePathname(basePath, 'zh'), site.url).toString(),
-    }
+  ? site.locales.reduce<AlternateLinks>((links, alternateLocale) => {
+      links[alternateLocale] = new URL(
+        localizePathname(basePath, alternateLocale),
+        site.url,
+      ).toString();
+      return links;
+    }, {})
   : null;
-const resolvedAlternateLinks = alternateLinks === undefined ? defaultAlternates : alternateLinks;
-const xDefaultHref = resolvedAlternateLinks?.en ?? canonical;
-const localeMap: Record<Locale, string> = {
-  en: 'en_US',
-  zh: 'zh_TW',
-};
+const alternateLinkInput = alternateLinks === undefined ? defaultAlternates : alternateLinks;
+const resolvedAlternateLinks = alternateLinkInput
+  ? site.locales.reduce<AlternateLinks>((links, alternateLocale) => {
+      const href = alternateLinkInput[alternateLocale];
+
+      if (href) {
+        links[alternateLocale] = new URL(href, site.url).toString();
+      }
+
+      return links;
+    }, {})
+  : null;
+const xDefaultHref = resolvedAlternateLinks?.[site.defaultLocale] ?? canonical;
 const resolvedSocialImage = socialImage ? new URL(socialImage, site.url).toString() : undefined;
 const robots = noindex ? 'noindex, nofollow' : 'index, follow';
 const keywordContent = keywords.filter(Boolean).join(', ');
 ---
 
 <!doctype html>
-<html lang={locale}>
+<html lang={localeMetadata[locale].htmlLang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -82,7 +92,7 @@ const keywordContent = keywords.filter(Boolean).join(', ');
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:locale" content={localeMap[locale]} />
+    <meta property="og:locale" content={localeMetadata[locale].ogLocale} />
     <meta name="twitter:card" content={resolvedSocialImage ? 'summary_large_image' : 'summary'} />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={description} />
@@ -100,11 +110,15 @@ const keywordContent = keywords.filter(Boolean).join(', ');
     {
       resolvedAlternateLinks && (
         <>
-          {resolvedAlternateLinks.en && (
-            <link rel="alternate" hreflang="en" href={resolvedAlternateLinks.en} />
-          )}
-          {resolvedAlternateLinks.zh && (
-            <link rel="alternate" hreflang="zh" href={resolvedAlternateLinks.zh} />
+          {site.locales.map(
+            (alternateLocale) =>
+              resolvedAlternateLinks[alternateLocale] && (
+                <link
+                  rel="alternate"
+                  hreflang={alternateLocale}
+                  href={resolvedAlternateLinks[alternateLocale]}
+                />
+              ),
           )}
           <link rel="alternate" hreflang="x-default" href={xDefaultHref} />
         </>

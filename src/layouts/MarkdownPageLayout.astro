@@ -1,6 +1,7 @@
 ---
 import SiteLayout from './SiteLayout.astro';
 import { type Locale } from '../lib/i18n';
+import { localeMetadata } from '../lib/site';
 
 interface Frontmatter {
   locale: Locale;
@@ -22,7 +23,7 @@ const { locale, title, description, subtitle } = frontmatter as Frontmatter;
   <article class="content-body mx-auto w-full max-w-3xl">
     <header class="mb-10 space-y-4 border-b border-(--border-muted) pb-8">
       <p class="text-sm font-semibold uppercase tracking-[0.24em] text-(--color-primary)">
-        {locale === 'en' ? 'Page' : '頁面'}
+        {localeMetadata[locale].pageLabel}
       </p>
       <h1 class="font-heading text-4xl leading-tight text-(--color-heading) sm:text-5xl">
         {title}

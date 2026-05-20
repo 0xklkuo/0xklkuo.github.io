@@ -2,56 +2,43 @@
 layout: ../../layouts/MarkdownPageLayout.astro
 locale: en
 title: Terms of Use
-description: Basic terms for using the current static version of klkuo.guru.
-subtitle: Plain-language terms for the rebuilt static site.
+description: Plain-language terms for using the public pages and content on klkuo.guru.
+subtitle: Simple terms for browsing, sharing, and referencing this site.
 ---
 
-_Last updated: May 19, 2026_
+_Last updated: May 20, 2026_
 
 ## Acceptance
 
-By accessing this site, you agree to these terms.
+By accessing this site, you agree to these terms. If you do not agree, do not use the site.
 
-If you do not agree, do not use the site.
-
-## Intended Use
+## Permitted Use
 
 This site is provided for reading, browsing, and personal reference.
 
-You may:
+- You may read and share links to public pages.
+- You may quote brief excerpts with clear attribution.
+- You may not misuse the site, interfere with availability, misrepresent authorship, or republish substantial portions of content as your own.
 
-- read and share links to public pages,
-- quote brief portions with proper attribution,
-- and use the information here at your own discretion.
-
-You may not:
-
-- misuse the site,
-- attempt to interfere with its availability,
-- misrepresent authorship,
-- or republish substantial portions of content as your own.
-
-## Intellectual Property
+## Content and Intellectual Property
 
 Unless stated otherwise, site content and design remain the property of KL KUO.
 
-Open-source code in the repository is licensed separately under the repository license.
+Repository source code is licensed separately under the repository license.
 
-## No Warranty
+## Availability and No Warranty
 
 This site and its content are provided on an “as is” basis.
 
-I make no guarantee that the site will always be available, error-free, complete, or suitable for your specific purpose.
+I do not guarantee uninterrupted availability, error-free operation, completeness, or fitness for any specific purpose.
 
-## External Links
+## Third-Party Services
 
-This site may link to third-party websites. I am not responsible for their content, availability, or policies.
+This site may link to or embed third-party services. I am not responsible for their content, availability, or policies.
 
-## Changes
+## Updates and Contact
 
-These terms may be updated as the site evolves. The current version is the one published on this page.
-
-## Contact
+These terms may be updated as the site evolves. The version published on this page is the current version.
 
 For questions about these terms, contact:
 

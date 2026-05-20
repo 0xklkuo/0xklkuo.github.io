@@ -1,4 +1,4 @@
-import { site, type Locale } from './site';
+import { localeMetadata, site, type Locale } from './site';
 
 export { type Locale };
 
@@ -6,7 +6,15 @@ export const DEFAULT_LOCALE = site.defaultLocale;
 export const LOCALES = site.locales;
 
 export function isLocale(value: string): value is Locale {
-  return LOCALES.some((locale) => locale === value);
+  return value in localeMetadata;
+}
+
+export function assertLocale(value: string): Locale {
+  if (!isLocale(value)) {
+    throw new Error(`Expected a supported locale, received: ${value}`);
+  }
+
+  return value;
 }
 
 export function normalizePathname(pathname = '/'): string {
@@ -53,7 +61,7 @@ export function localizePathname(pathname: string, locale: Locale): string {
 }
 
 export function getAlternateLocale(locale: Locale): Locale {
-  return locale === 'en' ? 'zh' : 'en';
+  return localeMetadata[locale].alternateLocale;
 }
 
 export function getAlternatePathname(pathname: string, locale: Locale): string {

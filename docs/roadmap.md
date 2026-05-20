@@ -1,79 +1,42 @@
 # Roadmap
 
-| Milestone | Scope                                                      | Estimated effort |
-| --------- | ---------------------------------------------------------- | ---------------: |
-| 0         | Planning lock and explicit decision capture                |     2 to 4 hours |
-| 1         | Foundation reset, cleanup, tooling baseline, core docs     |    8 to 12 hours |
-| 2         | Site shell, locale navigation, dark mode, first MDX pages  |    8 to 12 hours |
-| 3         | Blog rebuild, content rendering, SEO hardening             |    6 to 10 hours |
-| 4         | Analytics integration and GitHub Pages deployment workflow |     4 to 8 hours |
-| 5         | Final hardening, cleanup, and handoff                      |     4 to 6 hours |
+## Rewrite Summary
 
-## Milestone 1
+| Milestone | Outcome                                                             |
+| --------- | ------------------------------------------------------------------- |
+| 0         | Planning lock and decision capture                                  |
+| 1         | Foundation reset, tooling baseline, and core docs                   |
+| 2         | Shared site shell, locale navigation, and dark mode                 |
+| 3         | Blog rebuild, SEO hardening, tag archives, and reading time         |
+| 4         | Optional analytics integration and GitHub Pages deployment workflow |
+| 5         | Final hardening, route consolidation, cleanup, and handoff          |
 
-### Deliverables
+## Milestone 5 Outcome
 
-- Remove AstroWind-era architecture and dynamic runtime features.
-- Install the static stack baseline.
-- Write scope, architecture, and roadmap docs.
-- Add validation commands and CI.
+This final pass closes the rewrite by:
 
-### Definition of Done
+- consolidating duplicated locale routes into shared locale-aware page implementations
+- enabling Astro opt-in prefetching on high-intent internal links
+- tightening behavior-focused tests
+- updating docs and policy pages so they reflect shipped behavior and remain open to future growth
+- removing leftover rewrite scaffolding that would make future changes harder than necessary
 
-- The project is pure static.
-- The project has a clear root layout and typed helper layer.
-- Validation commands pass locally and in CI.
+## Recommended Next Enhancement Tracks
 
-## Milestone 2
+These are optional follow-on tracks, not open rewrite work.
 
-### Deliverables
+| Track                      | Scope                                                                              | Estimated effort |
+| -------------------------- | ---------------------------------------------------------------------------------- | ---------------: |
+| Deployment verification    | Production smoke check, domain verification, analytics verification                |     1 to 2 hours |
+| CI smoke coverage          | Add a lightweight post-build route or HTML smoke check                             |     2 to 4 hours |
+| Content scale-up           | Pagination, archives, or stronger content taxonomy if post volume grows            |     4 to 8 hours |
+| Privacy and consent        | Add a consent layer only if policy or analytics requirements change                |     4 to 8 hours |
+| Creator tooling extensions | Product pages, landing pages, embeds, or subscriber flows as incremental additions |    6 to 16 hours |
 
-- Replace placeholder pages with the real site shell.
-- Add reusable header, footer, and locale-aware navigation.
-- Add the first stable MDX pages.
+## Working Rule for Future Changes
 
-### Definition of Done
+Treat this repository as a maintained product, not a rewrite branch:
 
-- The new UI shell is stable in both locales.
-- Dark mode and locale switching are part of the real layout.
-
-## Milestone 3
-
-### Deliverables
-
-- Rebuild blog listing, tag archive, and post pages.
-- Reuse existing Markdown blog content.
-- Preserve post URLs where practical, including locale-root post detail routes.
-- Restore estimated reading time and tag browsing.
-- Harden canonical, Open Graph, and locale-alternate behavior for the rebuilt routes.
-
-### Definition of Done
-
-- Blog content renders cleanly.
-- Metadata, sitemap behavior, reading time, tag archives, and locale-aware alternate links match the rebuilt route structure.
-
-## Milestone 4
-
-### Deliverables
-
-- Add analytics integration.
-- Add GitHub Pages deployment workflow.
-- Keep analytics production-only and optional by configuration.
-
-### Definition of Done
-
-- Main branch changes can deploy to GitHub Pages.
-- Analytics are isolated, minimal, and optional by configuration.
-
-## Milestone 5
-
-### Deliverables
-
-- Final cleanup pass.
-- Test additions where they improve confidence.
-- Final docs alignment.
-
-### Definition of Done
-
-- The repo is ready for normal iteration without rewrite scaffolding.
-- Docs match the shipped architecture.
+- extend the existing static-first foundation when possible
+- document major scope or architecture changes before they sprawl into code
+- keep each enhancement independently shippable and easy for another engineer or AI agent to continue

@@ -30,6 +30,7 @@ const { tags, locale, className = '', activeTagSlug } = Astro.props;
                 href={getBlogTagPath(locale, tag)}
                 class={classes.join(' ')}
                 data-active={isActive ? 'true' : 'false'}
+                data-astro-prefetch
                 aria-current={isActive ? 'page' : undefined}
               >
                 #{tag}

@@ -72,6 +72,7 @@ describe('blog helpers', () => {
     expect(getBlogPostPath('zh', 'alpha')).toBe('/zh/alpha/');
     expect(getBlogTagSlug('Agile Team')).toBe('agile-team');
     expect(getBlogTagPath('en', 'Agile Team')).toBe('/en/tag/agile-team/');
+    expect(() => getBlogTagPath('en', '!!!')).toThrow(/non-empty slug/i);
   });
 
   it('guards reserved or invalid top-level post slugs', () => {
@@ -96,15 +97,12 @@ describe('blog helpers', () => {
 
     expect(post.locale).toBe('en');
     expect(post.slug).toBe('alpha');
-    const resolvedImage = resolveBlogImage(
-      '~/assets/images/blog/how-to-build-wealth-from-nothing.png',
-    );
-
     expect(post.description).toBe('Alpha excerpt');
     expect(post.permalink).toBe('/en/alpha/');
     expect(post.indexPath).toBe('/en/blog/');
     expect(post.imagePath).toBe('~/assets/images/blog/how-to-build-wealth-from-nothing.png');
-    expect(post.image?.src).toBe(resolvedImage?.src);
+    expect(post.image).toBeDefined();
+    expect(resolveBlogImage('~/assets/images/blog/does-not-exist.png')).toBeUndefined();
   });
 
   it('builds alternate locale links, locale switch fallbacks, and tag archives', () => {

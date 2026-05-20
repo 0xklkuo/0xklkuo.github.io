@@ -4,9 +4,21 @@ import { getCollection } from 'astro:content';
 import PostCard from '../../../components/blog/PostCard.astro';
 import SiteLayout from '../../../layouts/SiteLayout.astro';
 import { getBlogIndexPath, getLocaleBlogPosts } from '../../../lib/blog';
+import { LOCALES, type Locale } from '../../../lib/i18n';
 import { siteContent } from '../../../lib/site-content';
 
-const locale = 'en';
+export function getStaticPaths() {
+  return LOCALES.map((locale) => ({
+    params: { locale },
+    props: { locale },
+  }));
+}
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props as Props;
 const content = siteContent[locale].blog;
 const posts = getLocaleBlogPosts(await getCollection('post'), locale);
 ---
@@ -17,7 +29,7 @@ const posts = getLocaleBlogPosts(await getCollection('post'), locale);
   description={content.description}
   canonicalPath={getBlogIndexPath(locale)}
   openGraphType="website"
-  keywords={['blog', 'writing', 'clarity', 'focus', 'systems']}
+  keywords={content.keywords}
 >
   <section class="mx-auto w-full max-w-5xl space-y-4">
     <p class="text-sm font-semibold uppercase tracking-[0.24em] text-(--color-primary)">

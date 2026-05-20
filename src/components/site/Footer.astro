@@ -26,7 +26,11 @@ const footer = siteContent[locale].footer;
       <nav aria-label="Legal" class="flex flex-wrap gap-3 md:justify-end">
         {
           legalLinks.map((item) => (
-            <a href={item.href} class="no-underline hover:text-(--color-heading)">
+            <a
+              href={item.href}
+              class="no-underline hover:text-(--color-heading)"
+              data-astro-prefetch
+            >
               {item.label}
             </a>
           ))

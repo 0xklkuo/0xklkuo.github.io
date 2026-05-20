@@ -1,10 +1,4 @@
 import { getLocalizedPath, type Locale } from './i18n';
-import { site } from './site';
-
-type Link = {
-  href: string;
-  label: string;
-};
 
 export type SocialIconName = 'brand-x' | 'brand-github' | 'brand-threads' | 'brand-linkedin';
 
@@ -14,19 +8,23 @@ export type SocialLink = {
   icon: SocialIconName;
 };
 
+type Link = {
+  href: string;
+  label: string;
+};
+
 type HomeFeature = {
   title: string;
   description: string;
 };
 
-type HomeCopy = {
+type LocaleContent = {
   nav: {
     home: string;
     blog: string;
     about: string;
     privacy: string;
     terms: string;
-    switchLocale: string;
     toggleThemeToDark: string;
     toggleThemeToLight: string;
   };
@@ -35,6 +33,7 @@ type HomeCopy = {
     title: string;
     quote: string;
     description: string;
+    profileImageAlt: string;
     featureTitle: string;
     features: HomeFeature[];
     aboutTitle: string;
@@ -50,6 +49,7 @@ type HomeCopy = {
     eyebrow: string;
     title: string;
     description: string;
+    keywords: string[];
     emptyTitle: string;
     emptyBody: string;
     readPost: string;
@@ -59,6 +59,7 @@ type HomeCopy = {
     minutesRead: string;
     tagPageEyebrow: string;
     tagPageTitlePrefix: string;
+    tagPageDescriptionPrefix: string;
     relatedTitle: string;
     backToIndex: string;
   };
@@ -74,7 +75,7 @@ export const socialLinks: SocialLink[] = [
   { href: 'https://linkedin.com/in/0xklkuo', label: 'LinkedIn', icon: 'brand-linkedin' },
 ];
 
-export const siteContent: Record<Locale, HomeCopy> = {
+export const siteContent: Record<Locale, LocaleContent> = {
   en: {
     nav: {
       home: 'Home',
@@ -82,7 +83,6 @@ export const siteContent: Record<Locale, HomeCopy> = {
       about: 'About',
       privacy: 'Privacy',
       terms: 'Terms',
-      switchLocale: '中文',
       toggleThemeToDark: 'Switch to dark mode',
       toggleThemeToLight: 'Switch to light mode',
     },
@@ -92,6 +92,7 @@ export const siteContent: Record<Locale, HomeCopy> = {
       quote: 'There is but one infinite game. — James Carse',
       description:
         'Just a slash dad exploring nature and tech to play better games toward an optimal life.',
+      profileImageAlt: 'KL KUO profile graphic',
       featureTitle: 'Current principles',
       features: [
         {
@@ -114,19 +115,20 @@ export const siteContent: Record<Locale, HomeCopy> = {
       aboutBody:
         'Dad. Developer. And more. I write about clarity, focus, systems, and building an intentional life without drifting into finite games.',
       aboutAction: 'Read the full story',
-      writingTitle: 'Writing now has a static home again',
+      writingTitle: 'Writing now has a stable home',
       writingBody:
-        'The rebuilt blog keeps the route structure small, serves posts from the content collection, and preserves existing slugs where practical.',
+        'The blog stays static-first, keeps route handling small, and can grow into future creator-facing pages and tools without forcing a rewrite.',
       writingAction: 'Browse the blog',
-      legalTitle: 'Simple and explicit by design',
+      legalTitle: 'Policies that can evolve with the site',
       legalBody:
-        'This rebuild keeps the public site static-first and moves legal pages into plain MDX so the repository stays understandable.',
+        'The legal pages stay in markdown so they remain readable in the repository and easy to extend over time.',
     },
     blog: {
       eyebrow: 'Writing',
       title: 'Blog',
       description:
-        'Notes on clarity, focus, systems, and intentional living, now rebuilt from the static content collection.',
+        'Notes on clarity, focus, systems, and intentional living, served from the static content collection.',
+      keywords: ['blog', 'writing', 'clarity', 'focus', 'systems'],
       emptyTitle: 'More writing is on the way.',
       emptyBody:
         'The route is ready. New and restored posts can ship here without changing the blog architecture again.',
@@ -137,11 +139,12 @@ export const siteContent: Record<Locale, HomeCopy> = {
       minutesRead: 'min read',
       tagPageEyebrow: 'Tag',
       tagPageTitlePrefix: 'Tag',
+      tagPageDescriptionPrefix: 'Posts filed under',
       relatedTitle: 'Keep reading',
       backToIndex: 'Back to blog',
     },
     footer: {
-      rights: `© ${new Date().getFullYear()} ${site.name}. All rights reserved.`,
+      rights: `© ${new Date().getFullYear()} KL KUO. All rights reserved.`,
     },
   },
   zh: {
@@ -151,7 +154,6 @@ export const siteContent: Record<Locale, HomeCopy> = {
       about: '關於',
       privacy: '隱私政策',
       terms: '使用條款',
-      switchLocale: 'English',
       toggleThemeToDark: '切換為深色模式',
       toggleThemeToLight: '切換為淺色模式',
     },
@@ -160,6 +162,7 @@ export const siteContent: Record<Locale, HomeCopy> = {
       title: '平衡。悠遊。暢玩。',
       quote: 'There is but one infinite game. — James Carse',
       description: '只是個為了玩更好的遊戲，探索自然和科技，實現最佳人生的斜槓老爸。',
+      profileImageAlt: 'KL KUO 個人主視覺',
       featureTitle: '目前的核心原則',
       features: [
         {
@@ -179,17 +182,18 @@ export const siteContent: Record<Locale, HomeCopy> = {
       aboutBody:
         '父親、工程師，還有更多角色。我書寫清晰、專注、系統，以及如何在有限賽局之外打造有意識的人生。',
       aboutAction: '閱讀完整介紹',
-      writingTitle: '文章已經回到靜態站點裡',
-      writingBody: '重建後的文章列表與文章頁直接來自內容集合，並在可行時保留既有 slug。',
+      writingTitle: '文章現在有了更穩定的家',
+      writingBody:
+        '整個文章系統維持靜態優先、路由簡潔，之後若加入新的創作者工具、頁面或整合，也不需要整站重做。',
       writingAction: '瀏覽文章',
-      legalTitle: '刻意保持簡單與明確',
-      legalBody:
-        '這次重構讓公開網站維持靜態優先，並把法律頁面放回簡單的 MDX 檔案，讓整個專案更容易理解。',
+      legalTitle: '讓政策文件能跟著網站一起成長',
+      legalBody: '法律頁面保留為 markdown，讓內容在儲存庫裡更好讀，也更容易長期維護。',
     },
     blog: {
       eyebrow: '文章',
       title: '部落格',
-      description: '整理關於清晰、專注、系統，以及有意識生活的筆記，現在已改由靜態內容集合提供。',
+      description: '整理關於清晰、專注、系統，以及有意識生活的筆記，內容來自靜態集合。',
+      keywords: ['部落格', '文章', '清晰', '專注', '系統'],
       emptyTitle: '更多文章正在整理中。',
       emptyBody: '路由已經就緒，之後補回與新增文章都不需要再調整整體架構。',
       readPost: '閱讀文章',
@@ -199,11 +203,12 @@ export const siteContent: Record<Locale, HomeCopy> = {
       minutesRead: '分鐘閱讀',
       tagPageEyebrow: '標籤',
       tagPageTitlePrefix: '標籤',
+      tagPageDescriptionPrefix: '收錄於',
       relatedTitle: '延伸閱讀',
       backToIndex: '返回文章列表',
     },
     footer: {
-      rights: `© ${new Date().getFullYear()} ${site.name}。保留所有權利。`,
+      rights: `© ${new Date().getFullYear()} KL KUO。保留所有權利。`,
     },
   },
 };

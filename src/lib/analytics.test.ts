@@ -20,7 +20,22 @@ describe('analytics helpers', () => {
     ).toBeNull();
   });
 
-  it('returns a trimmed analytics config in production', () => {
+  it('falls back to MODE when PROD is not provided', () => {
+    expect(
+      resolveAnalyticsConfig({
+        MODE: 'production',
+        PUBLIC_ANALYTICS_SCRIPT_URL: 'https://analytics.example.com/script.js',
+        PUBLIC_ANALYTICS_WEBSITE_ID: 'site-id',
+      }),
+    ).toEqual({
+      enabled: true,
+      scriptUrl: 'https://analytics.example.com/script.js',
+      websiteId: 'site-id',
+      domains: undefined,
+    });
+  });
+
+  it('trims production analytics values and ignores whitespace-only config', () => {
     expect(
       resolveAnalyticsConfig({
         PROD: true,
@@ -34,5 +49,13 @@ describe('analytics helpers', () => {
       websiteId: 'site-id',
       domains: 'klkuo.guru',
     });
+
+    expect(
+      resolveAnalyticsConfig({
+        PROD: true,
+        PUBLIC_ANALYTICS_SCRIPT_URL: '   ',
+        PUBLIC_ANALYTICS_WEBSITE_ID: 'site-id',
+      }),
+    ).toBeNull();
   });
 });

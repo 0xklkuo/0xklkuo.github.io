@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import { getCollection, render } from 'astro:content';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
 
 import RelatedPosts from '../../components/blog/RelatedPosts.astro';
 import TagList from '../../components/blog/TagList.astro';
@@ -15,33 +15,45 @@ import {
   normalizeBlogPost,
   pickRelatedBlogPosts,
 } from '../../lib/blog';
-import type { Locale } from '../../lib/i18n';
+import { LOCALES, getAlternateLocale, type Locale } from '../../lib/i18n';
 import { site } from '../../lib/site';
 import { siteContent } from '../../lib/site-content';
 
 export async function getStaticPaths() {
   const entries = await getCollection('post');
 
-  return getLocaleBlogPosts(entries, 'zh').map((post) => ({
-    params: { slug: post.slug },
-    props: { id: post.id },
-  }));
+  return LOCALES.flatMap((locale) =>
+    getLocaleBlogPosts(entries, locale).map((post) => ({
+      params: { locale, slug: post.slug },
+      props: { id: post.id, locale },
+    })),
+  );
 }
 
-const locale: Locale = 'zh';
-const { id } = Astro.props;
+interface Props {
+  id: string;
+  locale: Locale;
+}
+
+const { id, locale } = Astro.props as Props;
 const entries = await getCollection('post');
-const entry = entries.find((candidate) => candidate.id === id);
+const entry = entries.find((candidate) => candidate.id === id) as
+  | CollectionEntry<'post'>
+  | undefined;
 
 if (!entry) {
   throw new Error(`Missing blog entry for ${id}`);
 }
 
 const post = normalizeBlogPost(entry);
-const allPosts = getLocaleBlogPosts(entries, 'en').concat(getLocaleBlogPosts(entries, 'zh'));
+const allPosts = LOCALES.flatMap((currentLocale) => getLocaleBlogPosts(entries, currentLocale));
 const rawAlternateLinks = getBlogAlternateLinks(allPosts, post);
 const alternateLinks = rawAlternateLinks ?? { [locale]: post.permalink };
-const alternatePathname = getLocaleSwitchPath(locale, rawAlternateLinks, getBlogIndexPath('en'));
+const alternatePathname = getLocaleSwitchPath(
+  locale,
+  rawAlternateLinks,
+  getBlogIndexPath(getAlternateLocale(locale)),
+);
 const relatedPosts = pickRelatedBlogPosts(allPosts, post);
 const content = siteContent[locale].blog;
 const { Content, remarkPluginFrontmatter } = await render(entry);
@@ -139,6 +151,7 @@ const pageDescription = post.description || site.description;
       <a
         href={post.indexPath}
         class="inline-flex items-center gap-2 rounded-full border border-(--border-muted) px-4 py-2 no-underline transition hover:border-(--color-primary) hover:text-(--color-heading)"
+        data-astro-prefetch
       >
         <span aria-hidden="true">←</span>
         {content.backToIndex}

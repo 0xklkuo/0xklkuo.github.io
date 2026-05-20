@@ -1,14 +1,25 @@
 ---
 import { Image } from 'astro:assets';
 
+import SocialLinks from '../../components/site/SocialLinks.astro';
 import SiteLayout from '../../layouts/SiteLayout.astro';
-import { getLocalizedPath } from '../../lib/i18n';
+import { LOCALES, getLocalizedPath, type Locale } from '../../lib/i18n';
 import { site } from '../../lib/site';
 import { siteContent, socialLinks } from '../../lib/site-content';
 import ProfileImage from '../../assets/images/profile/klkuo.guru.png';
-import SocialLinks from '../../components/site/SocialLinks.astro';
 
-const locale = 'en';
+export function getStaticPaths() {
+  return LOCALES.map((locale) => ({
+    params: { locale },
+    props: { locale },
+  }));
+}
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props as Props;
 const content = siteContent[locale].home;
 ---
 
@@ -38,7 +49,7 @@ const content = siteContent[locale].home;
     <div class="rounded-4xl border border-(--border-muted) bg-(--surface-soft) p-4">
       <Image
         src={ProfileImage}
-        alt="KL KUO profile graphic"
+        alt={content.profileImageAlt}
         class="h-full w-full rounded-3xl object-cover"
         widths={[480, 720]}
         sizes="(min-width: 1024px) 32rem, 100vw"
@@ -67,6 +78,7 @@ const content = siteContent[locale].home;
       <a
         href={getLocalizedPath(locale, 'about')}
         class="mt-6 inline-flex rounded-full border border-(--color-primary) px-4 py-2 no-underline transition hover:bg-(--color-primary)/10"
+        data-astro-prefetch
       >
         {content.aboutAction}
       </a>
@@ -79,6 +91,7 @@ const content = siteContent[locale].home;
         <a
           href={getLocalizedPath(locale, 'blog')}
           class="mt-6 inline-flex rounded-full border border-(--color-primary) px-4 py-2 no-underline transition hover:bg-(--color-primary)/10"
+          data-astro-prefetch
         >
           {content.writingAction}
         </a>

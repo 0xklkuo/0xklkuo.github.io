@@ -1,6 +1,7 @@
 import type { ImageMetadata } from 'astro';
 
-import { getLocalizedPath, isLocale, type Locale } from './i18n';
+import { LOCALES, getAlternateLocale, getLocalizedPath, isLocale, type Locale } from './i18n';
+import { localeMetadata } from './site';
 
 type BlogImageModule = ImageMetadata;
 
@@ -50,6 +51,7 @@ export type BlogTag = {
 export const RESERVED_BLOG_SLUGS = ['about', 'privacy', 'terms', 'blog', 'tag'] as const;
 
 const reservedBlogSlugSet = new Set<string>(RESERVED_BLOG_SLUGS);
+const blogDateFormatters = new Map<Locale, Intl.DateTimeFormat>();
 
 const blogImageModules = import.meta.glob('../assets/images/blog/*.{png,jpg,jpeg,webp,avif}', {
   eager: true,
@@ -294,18 +296,15 @@ export function getBlogTagAlternateLinks(
   tagSlug: string,
 ): Partial<Record<Locale, string>> | null {
   const normalizedTagSlug = getBlogTagSlug(tagSlug);
-  const links = (['en', 'zh'] as const).reduce<Partial<Record<Locale, string>>>(
-    (result, locale) => {
-      const matchingPosts = findBlogPostsByTag(posts, locale, normalizedTagSlug);
+  const links = LOCALES.reduce<Partial<Record<Locale, string>>>((result, locale) => {
+    const matchingPosts = findBlogPostsByTag(posts, locale, normalizedTagSlug);
 
-      if (matchingPosts.length > 0) {
-        result[locale] = getBlogTagPath(locale, normalizedTagSlug);
-      }
+    if (matchingPosts.length > 0) {
+      result[locale] = getBlogTagPath(locale, normalizedTagSlug);
+    }
 
-      return result;
-    },
-    {},
-  );
+    return result;
+  }, {});
 
   return Object.keys(links).length > 1 ? links : null;
 }
@@ -315,18 +314,22 @@ export function getLocaleSwitchPath(
   alternateLinks: Partial<Record<Locale, string>> | null,
   fallbackPath: string,
 ): string {
-  const targetLocale = currentLocale === 'en' ? 'zh' : 'en';
+  const targetLocale = getAlternateLocale(currentLocale);
 
   return alternateLinks?.[targetLocale] ?? fallbackPath;
 }
 
 export function formatBlogDate(date: Date, locale: Locale): string {
-  const localeCode = locale === 'en' ? 'en-US' : 'zh-TW';
+  const formatter =
+    blogDateFormatters.get(locale) ??
+    new Intl.DateTimeFormat(localeMetadata[locale].dateLocale, {
+      dateStyle: 'long',
+      timeZone: 'UTC',
+    });
 
-  return new Intl.DateTimeFormat(localeCode, {
-    dateStyle: 'long',
-    timeZone: 'UTC',
-  }).format(date);
+  blogDateFormatters.set(locale, formatter);
+
+  return formatter.format(date);
 }
 
 export function pickRelatedBlogPosts(

@@ -25,6 +25,7 @@ export default defineConfig({
       redirectToDefaultLocale: false,
     },
   },
+  prefetch: true,
   env: {
     schema: {
       PUBLIC_ANALYTICS_SCRIPT_URL: envField.string({

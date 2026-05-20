@@ -2,99 +2,65 @@
 
 ## Objective
 
-Refactor `klkuo.guru` into a minimal, pure static personal site that is easy to reason about, easy to ship, and easy to maintain over time.
+Keep `klkuo.guru` as a small, static-first personal site that is easy to understand, easy to evolve, and safe to upgrade over time.
 
-## Explicit Decisions
+## Current Product Direction
 
-- The site uses Astro v6, Tailwind CSS v4, and TypeScript v5.
-- The site is static-only. No middleware, server actions, private routes, or server adapters are allowed.
-- GitHub Pages is the deployment target.
-- The custom domain is `klkuo.guru`.
-- Supported locales are `en` and `zh`.
+- The site is a public, content-led website with localized experiences for `en` and `zh`.
 - `/` redirects to `/en/`.
-- Markdown and MDX are used for static pages and docs.
-- Astro content collections are used for blog content.
-- Search optimization means SEO and crawlability, not client-side site search.
-- Existing blog slugs should be preserved when practical.
-- The blog index should live at `/[locale]/blog/`, while blog post detail pages should remain at `/[locale]/<slug>/` where practical to avoid breaking previous public URLs.
-- Tag archives should live at `/[locale]/tag/<tag>/`.
-- Web analytics provider details should stay out of source code and be loaded from public environment variables in production builds.
-- The analytics script should be injected into the document head only when the required public environment variables are present.
-- Blog locale switching and hreflang output should only point to translated sibling posts or translated tag archives when they exist. If a sibling translation does not exist, the UI should fall back to the locale blog index instead of linking to a 404 route.
+- The blog index lives at `/[locale]/blog/`.
+- Blog post detail pages keep the established locale-root slug shape where practical, such as `/en/my-post/`.
+- Tag archives live at `/[locale]/tag/[tag]/`.
+- Production analytics is optional and only loaded when the required public environment variables are present.
+- The current deployment target is GitHub Pages on the custom domain `klkuo.guru`.
 
-## Goals
+## Change Guardrails
 
-- Keep the codebase small and explicit.
-- Prefer first-party Astro patterns over framework-specific abstractions.
-- Make core decisions visible in repository docs.
-- Keep the project static, fast, and deployable from GitHub alone.
-- Add a validation baseline with formatting, linting, checks, tests, and build verification.
+- Preserve the static-first baseline unless a new product need clearly justifies more runtime complexity.
+- Prefer native Astro patterns, typed configuration, and small helpers over layered abstractions.
+- Keep public routes stable when practical, especially previously shared blog URLs.
+- Keep metadata, canonical URLs, sitemap behavior, and locale alternates honest.
+- Isolate optional integrations so providers, tools, and versions can change without broad rewrites.
+- Allow the stack to move to maintained stable or LTS releases when the upgrade cost is justified.
+- Leave room for future creator-facing capabilities such as product pages, landing pages, embedded tools, or subscribership flows without hardcoding them into today’s scope language.
 
-## Non-Goals
+## Current Scope
 
-- No mailing list backend.
-- No survey workflow.
-- No HTMX, Alpine, or similar DOM-driven runtime layer.
-- No AstroWind integration or configuration layer.
-- No vanity redirect routes.
-- No on-site search in this rewrite scope.
+### Content and Pages
 
-## Functional Scope
+- Locale-prefixed public pages under `/en/` and `/zh/`
+- Shared shell and markdown-backed policy pages
+- Static blog pages generated from content collections
+- Static tag archive pages generated from blog tags
+- Locale-specific long-form about pages
 
-### Pages
+### UX and Performance
 
-- Locale-prefixed public pages under `/en/` and `/zh/`.
-- Static MDX pages for intros and documentation.
-- Static blog pages generated from content collections.
-- Static tag archive pages generated from blog tags.
+- Dark mode
+- Clear locale switching with safe fallbacks when a translated sibling route does not exist
+- Accessible keyboard-friendly navigation
+- Astro opt-in prefetching on high-intent internal links
+- Minimal client-side behavior beyond theme preference and optional analytics
 
-### UX Foundations
+### SEO and Metadata
 
-- Dark mode.
-- Clear locale switching.
-- Accessible, keyboard-friendly navigation.
-- Minimal layout and predictable routing.
+- Canonical URLs
+- Route-aware hreflang output
+- Per-page metadata
+- `robots.txt`
+- Sitemap generation
+- Semantic content structure
+- Estimated reading time on blog posts
 
-### SEO Foundations
+### Validation and Operations
 
-- Canonical URLs.
-- Metadata per page.
-- `robots.txt`.
-- Sitemap generation.
-- Semantic content structure.
-- Estimated reading time on blog posts.
-- Route-aware hreflang output that does not advertise untranslated blog detail or tag archive pages.
+- Prettier, ESLint, `astro check`, Vitest, and production build verification
+- CI validation on pushes and pull requests
+- GitHub Pages deployment workflow
 
-## Milestone Acceptance Criteria
+## Current Out-of-Scope Work
 
-### Milestone 1: Foundation Reset
-
-- Dynamic and AstroWind-specific code is removed.
-- The repo builds as a pure static Astro project.
-- Tailwind CSS v4 is installed and active.
-- Core docs exist and record the decisions above.
-- `format`, `lint`, `check`, `test`, and `build` scripts exist and pass.
-
-### Milestone 2: Site Shell and I18n
-
-- Reusable layout, navigation, and footer are in place.
-- `en` and `zh` static pages render from the new shell.
-- Dark mode and locale switching work in the new UI.
-
-### Milestone 3: Blog and SEO
-
-- Blog index, tag archive, and post pages render from content collections.
-- Existing slugs are preserved where practical, including locale-root blog post detail routes.
-- Metadata, sitemap, canonical URL behavior, reading time, and locale-aware alternate links are verified against the rebuilt routes.
-
-### Milestone 4: Analytics and Deployment
-
-- Analytics is integrated cleanly and stays optional by configuration.
-- GitHub Actions deploy the site to GitHub Pages from the validated static build output.
-- The custom domain remains intact.
-
-### Milestone 5: Hardening
-
-- Helper logic is covered by tests where valuable.
-- Docs are updated to match shipped behavior.
-- Final cleanup removes leftover rewrite scaffolding.
+- Authenticated experiences or private user areas
+- Custom backends for user submissions or operational workflows
+- Extra client-side runtime layers unless they solve a clear product need
+- On-site search unless it materially improves the site enough to justify its maintenance cost

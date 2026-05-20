@@ -1,75 +1,101 @@
 # Architecture
 
-## Principles
+## System Goals
 
-- Static by default.
-- Small surface area.
-- Typed configuration instead of layered indirection.
-- Repository docs describe decisions before feature code expands.
+- Stay static-first and operationally small
+- Keep route behavior explicit
+- Centralize locale-aware decisions instead of duplicating them per page
+- Keep optional integrations replaceable
+- Make future enhancements incremental instead of rewrite-driven
 
-## Current Foundation Structure
+## Core Subsystems
 
-- `src/lib/site.ts` stores site-level constants.
-- `src/lib/i18n.ts` stores locale and pathname helpers.
-- `src/lib/site-content.ts` stores localized shell copy, navigation labels, and social links.
-- `src/lib/blog.ts` normalizes content-collection entries into blog routes, tag routes, metadata, related-post inputs, and locale-switch behavior.
-- `src/lib/markdown.mjs` adds the build-time reading-time remark plugin.
-- `src/lib/analytics.ts` normalizes the production analytics configuration from public environment variables without binding the codebase to a specific provider.
-- `astro.config.mjs` declares the public analytics variables through Astro's built-in environment schema so validation and runtime usage stay aligned.
-- `src/layouts/BaseLayout.astro` provides metadata, route-aware alternate locale links, global styles, dark-mode bootstrapping, and analytics injection.
-- `src/layouts/SiteLayout.astro` composes the reusable shell.
-- `src/layouts/MarkdownPageLayout.astro` wraps MDX and Markdown pages in the same shell.
-- `src/components/site/Header.astro` and `src/components/site/Footer.astro` implement the shared locale-aware navigation.
-- `src/components/blog/` contains the rebuilt static blog list, tag, and related-post presentation pieces.
-- `src/pages/index.astro` redirects to `/en/`.
-- `src/pages/en/` and `src/pages/zh/` contain locale-prefixed home, blog, tag, about, privacy, and terms pages.
-- `src/content/post/` stores blog Markdown content wired into the rebuilt blog routes.
-- `src/content.config.ts` defines the blog content collection schema.
-- `src/styles/global.css` imports Tailwind CSS v4 and the site color/font tokens.
+### 1. Site Configuration and Locale Metadata
+
+- `src/lib/site.ts` stores site-wide constants and locale metadata.
+- `src/lib/i18n.ts` handles locale validation, pathname normalization, locale switching, and localized route building.
+- Locale-specific presentation copy lives in `src/lib/site-content.ts`.
+- Markdown-backed full-page content remains readable in `src/pages/en/` and `src/pages/zh/`, with `about` in MDX and `privacy` / `terms` in Markdown.
+
+### 2. Layout and Shared Shell
+
+- `src/layouts/BaseLayout.astro` owns global metadata, canonical and alternate links, global theme bootstrapping, and analytics injection.
+- `src/layouts/SiteLayout.astro` composes the shared shell.
+- `src/layouts/MarkdownPageLayout.astro` keeps locale-specific MDX pages aligned with the same shell.
+- `src/components/site/` contains reusable navigation, footer, theme toggle, icons, analytics, and social links.
+
+### 3. Content and Blog Model
+
+- `src/content/post/` stores blog content.
+- `src/content.config.ts` defines the blog collection schema.
+- `src/lib/markdown.mjs` adds build-time reading time.
+- `src/lib/blog.ts` normalizes entries into blog posts, tag archives, alternate links, and related-post inputs.
+
+### 4. Route Layer
+
+- `src/pages/index.astro` redirects `/` to `/en/`.
+- `src/pages/[locale]/` contains the shared locale-aware implementations for home, blog index, post detail, and tag archive routes.
+- `src/pages/en/` and `src/pages/zh/` contain the locale-specific full-page Markdown/MDX documents such as `about`, `privacy`, and `terms`.
+- `src/pages/404.astro` provides a static recovery page with locale entry links.
+
+### 5. Client-Side Behavior
+
+The site intentionally keeps client behavior small:
+
+- theme preference persistence
+- optional analytics script loading in production
+- Astro opt-in prefetching on selected internal links such as primary navigation, blog cards, tags, legal links, and recovery links
 
 ## Routing Model
 
-- `/` is a static redirect page to `/en/`.
-- `/en/` is the default public locale entry.
-- `/zh/` is the secondary locale entry.
-- `/en/about/`, `/zh/about/`, `/en/privacy/`, `/zh/privacy/`, `/en/terms/`, and `/zh/terms/` are now backed by the shared shell.
-- `/en/blog/` and `/zh/blog/` render locale-specific post indexes from the `post` collection.
-- `/en/[slug]/` and `/zh/[slug]/` preserve existing post detail URLs where practical.
-- `/en/tag/[tag]/` and `/zh/tag/[tag]/` render static tag archives.
+- `/` → redirect page to `/en/`
+- `/[locale]/` → locale home page
+- `/[locale]/about/` → locale-specific about page
+- `/[locale]/privacy/` and `/[locale]/terms/` → locale-specific Markdown pages under `src/pages/en/` and `src/pages/zh/`
+- `/[locale]/blog/` → locale blog index
+- `/[locale]/[slug]/` → locale blog post detail route
+- `/[locale]/tag/[tag]/` → locale tag archive
 
-## Styling Model
+Reserved top-level slugs prevent blog posts from colliding with fixed site routes.
 
-- Tailwind CSS v4 is added through `@tailwindcss/vite` in `astro.config.mjs`.
-- Tailwind utilities are globally available through `src/styles/global.css`.
-- The color palette and preferred font stacks are restored as CSS tokens.
-- A minimal self-hosted Fontsource set is loaded for the currently used sans, heading, mono, and Chinese text paths.
-- The Vite alias `~ -> ./src` is restored so blog content can keep concise asset references such as `~/assets/images/blog/example.png`.
-- Dark mode is class-driven using `html.dark` to keep behavior explicit and easy to test.
+## Locale and Alternate-Link Behavior
 
-## Content Model
+- The locale switch only points to a translated sibling route when one exists.
+- If a translated sibling post or tag archive does not exist, the locale switch falls back to that locale’s blog index.
+- Default alternate links are generated from the canonical route, while blog routes can override them with route-aware alternates.
 
-- Static pages use MDX where it helps readability.
-- Blog posts live in the `post` content collection.
-- Blog frontmatter remains intentionally small: title, summary text, publish dates, draft state, tags, image, and optional author.
-- Blog locale and slug are derived from the collection entry id, so content files keep routing explicit without a second permalink layer.
-- Blog post reading time is computed at build time by the remark plugin and rendered in the post header.
-- Blog detail pages only emit hreflang alternates for translated sibling posts. Tag archives follow the same rule. When a sibling translation is missing, the locale switch falls back to the locale blog index.
+## Performance Model
 
-## Tooling Model
+- All pages are statically built.
+- Images use Astro’s asset pipeline.
+- Prefetching is opt-in and only applied to likely next clicks.
+- Reading time is computed at build time instead of on the client.
+- Analytics is omitted entirely when production configuration is absent.
 
-- Formatting uses Prettier.
-- Linting uses ESLint with Astro and TypeScript rules.
-- Structural validation uses `astro check`.
-- Unit tests use Vitest, including pure helper coverage for i18n, site copy, and blog routing logic.
-- `npm run validate` is the one-command baseline for local and CI verification.
+## Validation Model
+
+- `npm run format` and `npm run format:check` for formatting
+- `npm run lint` for linting
+- `npm run check` for Astro diagnostics
+- `npm run test` for behavior-focused helper tests
+- `npm run build` for static production output
+- `npm run validate` as the single local and CI verification command
 
 ## Deployment Model
 
-- Build target is static output only.
-- GitHub Pages is the deployment target.
-- `public/CNAME` pins the custom domain.
-- `public/.nojekyll` ensures GitHub Pages serves Astro asset folders without Jekyll processing.
-- `site` is set to `https://klkuo.guru` in Astro config for sitemap and canonical URL correctness.
-- `.github/workflows/deploy.yml` installs dependencies, runs `npm run validate`, uploads `dist/`, and deploys the artifact to GitHub Pages.
-- Analytics is injected only in production builds when the required public environment variables are present.
-- Local development stays free of third-party analytics scripts, and the provider can change without code-level renaming or hardcoded identifiers.
+- The current deployment target is GitHub Pages.
+- `public/CNAME` keeps the custom domain pinned.
+- `public/.nojekyll` prevents Jekyll from interfering with Astro asset folders.
+- `.github/workflows/ci.yml` validates pushes and pull requests.
+- `.github/workflows/deploy.yml` validates, builds, uploads, and deploys `dist/`.
+- Public analytics variables are declared in `astro.config.mjs` so local development, validation, and deployment stay aligned.
+
+## Change Guidance
+
+When extending the site:
+
+- add shared locale-aware behavior in the helper layer before duplicating route logic
+- prefer structured content maps or content collections for mirrored pages
+- keep provider-specific integrations behind small adapters
+- update `docs/spec.md` when scope or guardrails change
+- update `README.md` only for quick-start or deployment-facing changes

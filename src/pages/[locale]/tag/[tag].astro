@@ -12,21 +12,30 @@ import {
   getLocaleBlogPosts,
   getLocaleSwitchPath,
 } from '../../../lib/blog';
+import { LOCALES, getAlternateLocale, type Locale } from '../../../lib/i18n';
 import { siteContent } from '../../../lib/site-content';
 
 export async function getStaticPaths() {
   const entries = await getCollection('post');
-  const posts = getLocaleBlogPosts(entries, 'zh');
 
-  return getBlogTags(posts, 'zh').map((tag) => ({
-    params: { tag: tag.slug },
-  }));
+  return LOCALES.flatMap((locale) => {
+    const posts = getLocaleBlogPosts(entries, locale);
+
+    return getBlogTags(posts, locale).map((tag) => ({
+      params: { locale, tag: tag.slug },
+      props: { locale },
+    }));
+  });
 }
 
-const locale = 'zh';
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props as Props;
 const tagSlug = Astro.params.tag ?? '';
 const entries = await getCollection('post');
-const allPosts = getLocaleBlogPosts(entries, 'en').concat(getLocaleBlogPosts(entries, 'zh'));
+const allPosts = LOCALES.flatMap((currentLocale) => getLocaleBlogPosts(entries, currentLocale));
 const archive = getBlogTagArchive(allPosts, locale, tagSlug);
 
 if (!archive) {
@@ -36,9 +45,19 @@ if (!archive) {
 const content = siteContent[locale].blog;
 const rawAlternateLinks = getBlogTagAlternateLinks(allPosts, archive.slug);
 const alternateLinks = rawAlternateLinks ?? { [locale]: archive.path };
-const alternatePathname = getLocaleSwitchPath(locale, rawAlternateLinks, getBlogIndexPath('en'));
-const pageTitle = `${content.tagPageTitlePrefix}：#${archive.label}`;
-const pageDescription = `標籤 #${archive.label} 的文章。`;
+const alternatePathname = getLocaleSwitchPath(
+  locale,
+  rawAlternateLinks,
+  getBlogIndexPath(getAlternateLocale(locale)),
+);
+const pageTitle =
+  locale === 'en'
+    ? `${content.tagPageTitlePrefix}: #${archive.label}`
+    : `${content.tagPageTitlePrefix}：#${archive.label}`;
+const pageDescription =
+  locale === 'en'
+    ? `${content.tagPageDescriptionPrefix} #${archive.label}.`
+    : `${content.tagPageDescriptionPrefix} #${archive.label} 的文章。`;
 ---
 
 <SiteLayout
@@ -48,7 +67,7 @@ const pageDescription = `標籤 #${archive.label} 的文章。`;
   canonicalPath={archive.path}
   alternatePathname={alternatePathname}
   alternateLinks={alternateLinks}
-  keywords={[archive.label, '標籤', '文章']}
+  keywords={[archive.label, ...content.keywords.slice(0, 2)]}
 >
   <section class="mx-auto w-full max-w-5xl space-y-4">
     <p class="text-sm font-semibold uppercase tracking-[0.24em] text-(--color-primary)">

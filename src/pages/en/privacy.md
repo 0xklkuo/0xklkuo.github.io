@@ -2,56 +2,37 @@
 layout: ../../layouts/MarkdownPageLayout.astro
 locale: en
 title: Privacy Policy
-description: Privacy notes for the current static version of klkuo.guru.
-subtitle: What this site does and does not collect in the current milestone.
+description: How klkuo.guru handles technical data, optional analytics, and third-party links.
+subtitle: A plain-language summary of how this site handles privacy today.
 ---
 
-_Last updated: May 19, 2026_
+_Last updated: May 20, 2026_
 
-This site is currently a **pure static website**.
+## Overview
 
-That matters, because the current milestone intentionally avoids forms, accounts, subscription flows, and client-side analytics.
+`klkuo.guru` is a public website. Browsing the site does not require an account or user-submitted profile data.
 
-## What the Site Currently Collects
+The site is built to stay simple, but its tooling and integrations may evolve over time. This policy describes the current live behavior rather than freezing the site to one implementation forever.
 
-At this stage, `klkuo.guru` does not intentionally collect personal data through the site interface.
+## Technical and Usage Data
 
-There are currently no:
+Hosting infrastructure, content delivery services, and your browser may process technical request data such as IP address, requested URL, referrer, browser metadata, and timestamps in order to serve the site reliably and securely.
 
-- account systems,
-- newsletter forms,
-- comment systems,
-- contact forms,
-- client-side analytics scripts,
-- or behavioral tracking tools.
+The live site may also load a limited analytics script when configured for production. If enabled, it is used to understand aggregate traffic and page usage patterns. The specific provider, storage behavior, and configuration may change as the site evolves.
 
-## Infrastructure-Level Data
+## Browser-Side Storage
 
-Like most websites, the hosting platform, CDN, and your browser may still process technical request data such as:
+The site stores your theme preference in local storage so light and dark mode choices persist on your device.
 
-- IP address,
-- requested URLs,
-- browser and device metadata,
-- timestamps,
-- and basic cache or delivery logs.
+If future creator tools, embeds, or integrations add client-side storage, this policy will be updated to reflect the shipped behavior.
 
-That processing is handled at the infrastructure level to serve the site reliably and securely.
+## Third-Party Destinations
 
-## Cookies
+The site links to third-party services such as GitHub, X, Threads, and LinkedIn. Those services apply their own terms, privacy practices, and tracking behavior when you visit them.
 
-This site does not currently set application cookies for accounts, marketing, or analytics.
+## Updates and Contact
 
-The only browser-side preference currently stored by site code is the local theme setting used for dark mode. That preference is stored in your browser's local storage and is not sent to a server by the site itself.
-
-## External Links
-
-This site links to third-party services such as GitHub, X, Threads, and LinkedIn. If you follow those links, those services apply their own privacy policies and tracking practices.
-
-## Future Updates
-
-If analytics, forms, newsletters, or other data-collecting features are added in later milestones, this policy will be updated to reflect the shipped behavior.
-
-## Contact
+This policy may change as the site expands, upgrades its tooling, or adopts new public-facing capabilities.
 
 For privacy questions, contact:
 

@@ -24,7 +24,12 @@ const { post, locale, readLabel, publishedLabel, updatedLabel, compact = false }
 >
   {
     post.image && (
-      <a href={post.permalink} class="block overflow-hidden" aria-label={post.title}>
+      <a
+        href={post.permalink}
+        class="block overflow-hidden"
+        aria-label={post.title}
+        data-astro-prefetch
+      >
         <Image
           src={post.image}
           alt={post.title}
@@ -66,7 +71,7 @@ const { post, locale, readLabel, publishedLabel, updatedLabel, compact = false }
         compact ? 'text-2xl' : 'text-3xl',
       ]}
     >
-      <a href={post.permalink} class="no-underline">
+      <a href={post.permalink} class="no-underline" data-astro-prefetch>
         {post.title}
       </a>
     </h2>
@@ -78,6 +83,7 @@ const { post, locale, readLabel, publishedLabel, updatedLabel, compact = false }
       <a
         href={post.permalink}
         class="inline-flex items-center gap-2 text-sm font-medium no-underline hover:text-(--color-primary)"
+        data-astro-prefetch
       >
         {readLabel}
         <span aria-hidden="true">→</span>

@@ -7,7 +7,7 @@ import {
   type Locale,
 } from '../../lib/i18n';
 import { getPrimaryNavigation, siteContent } from '../../lib/site-content';
-import { site } from '../../lib/site';
+import { localeMetadata, site } from '../../lib/site';
 
 import ThemeToggle from './ThemeToggle.astro';
 
@@ -39,7 +39,11 @@ const isActive = (href: string): boolean => {
 <header class="border-b border-(--border-muted) pb-6">
   <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
     <div class="space-y-2">
-      <a href={`/${locale}/`} class="inline-flex items-center gap-3 no-underline">
+      <a
+        href={`/${locale}/`}
+        class="inline-flex items-center gap-3 no-underline"
+        data-astro-prefetch
+      >
         <span class="font-heading text-lg tracking-[0.22em] text-(--color-heading)">
           {site.name}
         </span>
@@ -50,20 +54,25 @@ const isActive = (href: string): boolean => {
     <div class="flex flex-col gap-4 lg:items-end">
       <nav aria-label="Primary" class="flex flex-wrap gap-2 text-sm">
         {
-          nav.map((item) => (
-            <a
-              href={item.href}
-              class:list={[
-                'rounded-full border px-3 py-1.5 no-underline transition',
-                isActive(item.href)
-                  ? 'border-(--color-primary) bg-(--color-primary)/10 text-(--color-heading)'
-                  : 'border-(--border-muted) text-(--color-muted) hover:border-(--color-primary) hover:text-(--color-heading)',
-              ]}
-              aria-current={isActive(item.href) ? 'page' : undefined}
-            >
-              {item.label}
-            </a>
-          ))
+          nav.map((item) => {
+            const active = isActive(item.href);
+
+            return (
+              <a
+                href={item.href}
+                class:list={[
+                  'rounded-full border px-3 py-1.5 no-underline transition',
+                  active
+                    ? 'border-(--color-primary) bg-(--color-primary)/10 text-(--color-heading)'
+                    : 'border-(--border-muted) text-(--color-muted) hover:border-(--color-primary) hover:text-(--color-heading)',
+                ]}
+                aria-current={active ? 'page' : undefined}
+                data-astro-prefetch
+              >
+                {item.label}
+              </a>
+            );
+          })
         }
       </nav>
 
@@ -73,8 +82,9 @@ const isActive = (href: string): boolean => {
             <a
               href={localeHref}
               class="rounded-full border border-(--border-muted) px-3 py-1.5 no-underline transition hover:border-(--color-primary) hover:text-(--color-heading)"
+              data-astro-prefetch
             >
-              {labels.switchLocale}
+              {localeMetadata[locale].switchLabel}
             </a>
           )
         }
