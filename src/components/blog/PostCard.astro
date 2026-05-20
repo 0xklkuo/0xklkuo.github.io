@@ -1,0 +1,87 @@
+---
+import { Image } from 'astro:assets';
+
+import { formatBlogDate, type BlogPost } from '../../lib/blog';
+import { type Locale } from '../../lib/i18n';
+
+import Icon from '../site/Icon.astro';
+import TagList from './TagList.astro';
+
+interface Props {
+  post: BlogPost;
+  locale: Locale;
+  readLabel: string;
+  publishedLabel: string;
+  updatedLabel: string;
+  compact?: boolean;
+}
+
+const { post, locale, readLabel, publishedLabel, updatedLabel, compact = false } = Astro.props;
+---
+
+<article
+  class="group flex h-full flex-col overflow-hidden rounded-[1.75rem] border border-(--border-muted) bg-(--surface-soft)"
+>
+  {
+    post.image && (
+      <a href={post.permalink} class="block overflow-hidden" aria-label={post.title}>
+        <Image
+          src={post.image}
+          alt={post.title}
+          class:list={[
+            'w-full object-cover transition duration-300 group-hover:scale-[1.02]',
+            compact ? 'h-48' : 'h-64',
+          ]}
+          widths={compact ? [480, 720] : [640, 960]}
+          sizes={compact ? '(min-width: 768px) 24rem, 100vw' : '(min-width: 1024px) 32rem, 100vw'}
+        />
+      </a>
+    )
+  }
+
+  <div class="flex flex-1 flex-col p-6">
+    <div class="flex flex-wrap gap-x-4 gap-y-2 text-sm text-(--color-muted)">
+      <p class="inline-flex items-center gap-2">
+        <Icon name="calendar" class="size-4" />
+        <span class="sr-only">{publishedLabel}: </span>
+        <time datetime={post.publishDate.toISOString()}
+          >{formatBlogDate(post.publishDate, locale)}</time
+        >
+      </p>
+      {
+        post.updatedDate && (
+          <p>
+            <span class="font-medium text-(--color-heading)">{updatedLabel}:</span>
+            <time datetime={post.updatedDate.toISOString()}>
+              {formatBlogDate(post.updatedDate, locale)}
+            </time>
+          </p>
+        )
+      }
+    </div>
+
+    <h2
+      class:list={[
+        'mt-4 font-heading leading-tight text-(--color-heading)',
+        compact ? 'text-2xl' : 'text-3xl',
+      ]}
+    >
+      <a href={post.permalink} class="no-underline">
+        {post.title}
+      </a>
+    </h2>
+
+    <p class="mt-4 leading-8 text-(--color-default)">{post.description}</p>
+    <TagList tags={post.tags} locale={locale} className="mt-5" />
+
+    <div class="mt-6 pt-2">
+      <a
+        href={post.permalink}
+        class="inline-flex items-center gap-2 text-sm font-medium no-underline hover:text-(--color-primary)"
+      >
+        {readLabel}
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </div>
+</article>

@@ -1,0 +1,52 @@
+---
+import { getCollection } from 'astro:content';
+
+import PostCard from '../../../components/blog/PostCard.astro';
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import { getBlogIndexPath, getLocaleBlogPosts } from '../../../lib/blog';
+import { siteContent } from '../../../lib/site-content';
+
+const locale = 'en';
+const content = siteContent[locale].blog;
+const posts = getLocaleBlogPosts(await getCollection('post'), locale);
+---
+
+<SiteLayout
+  locale={locale}
+  title={content.title}
+  description={content.description}
+  canonicalPath={getBlogIndexPath(locale)}
+  openGraphType="website"
+  keywords={['blog', 'writing', 'clarity', 'focus', 'systems']}
+>
+  <section class="mx-auto w-full max-w-5xl space-y-4">
+    <p class="text-sm font-semibold uppercase tracking-[0.24em] text-(--color-primary)">
+      {content.eyebrow}
+    </p>
+    <h1 class="font-heading text-5xl leading-tight text-(--color-heading) sm:text-6xl">
+      {content.title}
+    </h1>
+    <p class="max-w-3xl text-lg leading-8 text-(--color-default)">{content.description}</p>
+  </section>
+
+  {
+    posts.length > 0 ? (
+      <section class="mx-auto mt-12 grid w-full max-w-5xl gap-8 xl:grid-cols-2">
+        {posts.map((post) => (
+          <PostCard
+            post={post}
+            locale={locale}
+            readLabel={content.readPost}
+            publishedLabel={content.publishedLabel}
+            updatedLabel={content.updatedLabel}
+          />
+        ))}
+      </section>
+    ) : (
+      <section class="mx-auto mt-12 w-full max-w-5xl rounded-[1.75rem] border border-(--border-muted) bg-(--surface-soft) p-8">
+        <h2 class="font-heading text-3xl text-(--color-heading)">{content.emptyTitle}</h2>
+        <p class="mt-4 max-w-2xl leading-8 text-(--color-default)">{content.emptyBody}</p>
+      </section>
+    )
+  }
+</SiteLayout>

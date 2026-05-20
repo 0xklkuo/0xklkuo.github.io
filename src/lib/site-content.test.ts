@@ -6,14 +6,15 @@ describe('site content helpers', () => {
   it('builds the primary navigation for each locale', () => {
     expect(getPrimaryNavigation('en')).toEqual([
       { href: '/en/', label: 'Home' },
+      { href: '/en/blog/', label: 'Blog' },
       { href: '/en/about/', label: 'About' },
       { href: '/en/privacy/', label: 'Privacy' },
       { href: '/en/terms/', label: 'Terms' },
     ]);
 
     expect(getPrimaryNavigation('zh')[1]).toEqual({
-      href: '/zh/about/',
-      label: '關於',
+      href: '/zh/blog/',
+      label: '文章',
     });
   });
 
@@ -32,8 +33,12 @@ describe('site content helpers', () => {
     ]);
   });
 
-  it('stores localized home copy for both locales', () => {
+  it('stores localized home and blog copy for both locales', () => {
     expect(siteContent.en.home.features).toHaveLength(3);
+    expect(siteContent.en.home.writingAction).toBe('Browse the blog');
+    expect(siteContent.en.blog.minutesRead).toBe('min read');
     expect(siteContent.zh.home.title).toBe('平衡。悠遊。暢玩。');
+    expect(siteContent.zh.blog.backToIndex).toBe('返回文章列表');
+    expect(siteContent.zh.blog.authorLabel).toBe('作者');
   });
 });

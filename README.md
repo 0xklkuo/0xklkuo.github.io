@@ -4,13 +4,15 @@ Minimal static personal site for KL KUO.
 
 ## Status
 
-Milestones 1 and 2 are in place:
+Milestones 1, 2, and 3 are in place:
 
 - AstroWind-era dynamic code has been removed.
 - The project now builds as a pure static Astro site.
 - Tailwind CSS v4 is installed through the official Vite plugin.
 - TypeScript v5, ESLint, Prettier, Astro checks, and Vitest are wired into the baseline workflow.
-- A reusable site shell now powers locale-aware home and MDX pages.
+- A reusable site shell now powers locale-aware home, blog, tag, and MDX pages.
+- Blog index routes render at `/[locale]/blog/`, while blog post routes keep the previous locale-root slug shape where practical, such as `/en/my-post/`.
+- Tag archives and estimated reading time are restored for the rebuilt blog.
 - Core decisions are documented before feature work continues.
 
 ## Core Decisions
@@ -19,6 +21,9 @@ Milestones 1 and 2 are in place:
 - Keep `en` and `zh` as the supported locales.
 - Redirect `/` to `/en/`.
 - Preserve existing blog slugs when practical during the blog rebuild.
+- Keep the blog index at `/[locale]/blog/`, but keep blog post detail pages at `/[locale]/<slug>/` where practical to avoid breaking previous public URLs.
+- Restore tag archives at `/[locale]/tag/<tag>/`.
+- Keep locale switch behavior and hreflang links honest on blog posts and tag pages: only point to translated siblings when they exist, otherwise fall back to the locale blog index for navigation.
 - Focus search optimization on SEO, not on-site search.
 - Keep the architecture intentionally small, static, and easy to maintain.
 

@@ -16,6 +16,9 @@ Refactor `klkuo.guru` into a minimal, pure static personal site that is easy to 
 - Astro content collections are used for blog content.
 - Search optimization means SEO and crawlability, not client-side site search.
 - Existing blog slugs should be preserved when practical.
+- The blog index should live at `/[locale]/blog/`, while blog post detail pages should remain at `/[locale]/<slug>/` where practical to avoid breaking previous public URLs.
+- Tag archives should live at `/[locale]/tag/<tag>/`.
+- Blog locale switching and hreflang output should only point to translated sibling posts or translated tag archives when they exist. If a sibling translation does not exist, the UI should fall back to the locale blog index instead of linking to a 404 route.
 
 ## Goals
 
@@ -41,6 +44,7 @@ Refactor `klkuo.guru` into a minimal, pure static personal site that is easy to 
 - Locale-prefixed public pages under `/en/` and `/zh/`.
 - Static MDX pages for intros and documentation.
 - Static blog pages generated from content collections.
+- Static tag archive pages generated from blog tags.
 
 ### UX Foundations
 
@@ -56,6 +60,8 @@ Refactor `klkuo.guru` into a minimal, pure static personal site that is easy to 
 - `robots.txt`.
 - Sitemap generation.
 - Semantic content structure.
+- Estimated reading time on blog posts.
+- Route-aware hreflang output that does not advertise untranslated blog detail or tag archive pages.
 
 ## Milestone Acceptance Criteria
 
@@ -75,9 +81,9 @@ Refactor `klkuo.guru` into a minimal, pure static personal site that is easy to 
 
 ### Milestone 3: Blog and SEO
 
-- Blog index and post pages render from content collections.
-- Existing slugs are preserved where practical.
-- Metadata, sitemap, and canonical URL behavior are verified.
+- Blog index, tag archive, and post pages render from content collections.
+- Existing slugs are preserved where practical, including locale-root blog post detail routes.
+- Metadata, sitemap, canonical URL behavior, reading time, and locale-aware alternate links are verified against the rebuilt routes.
 
 ### Milestone 4: Analytics and Deployment
 

@@ -25,11 +25,6 @@
   color-scheme: light;
 }
 
-html:lang(zh) {
-  --font-sans: 'LXGW WenKai TC', 'Aleo Variable', ui-sans-serif, system-ui, sans-serif;
-  --font-heading: 'Noto Serif TC Variable', 'Inknut Antiqua', Georgia, serif;
-}
-
 :root.dark {
   --color-page: #1f1f1f;
   --color-default: #f9f9f9;
@@ -127,6 +122,26 @@ a:hover {
 
 .content-body img {
   border-radius: 1.5rem;
+}
+
+.content-body table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+}
+
+.content-body th,
+.content-body td {
+  border: 1px solid var(--border-muted);
+  padding: 0.75rem 1rem;
+  text-align: left;
+}
+
+.content-body thead,
+.content-body th {
+  color: var(--color-heading);
+  background: var(--surface-soft);
 }
 
 .content-body hr {

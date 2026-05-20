@@ -1,0 +1,40 @@
+---
+import { type BlogPost } from '../../lib/blog';
+import { type Locale } from '../../lib/i18n';
+
+import PostCard from './PostCard.astro';
+
+interface Props {
+  posts: BlogPost[];
+  locale: Locale;
+  title: string;
+  readLabel: string;
+  publishedLabel: string;
+  updatedLabel: string;
+}
+
+const { posts, locale, title, readLabel, publishedLabel, updatedLabel } = Astro.props;
+---
+
+{
+  posts.length > 0 && (
+    <section class="mt-16 border-t border-(--border-muted) pt-12">
+      <div class="mb-8 space-y-3">
+        <h2 class="font-heading text-3xl text-(--color-heading)">{title}</h2>
+      </div>
+
+      <div class="grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
+        {posts.map((post) => (
+          <PostCard
+            post={post}
+            locale={locale}
+            readLabel={readLabel}
+            publishedLabel={publishedLabel}
+            updatedLabel={updatedLabel}
+            compact
+          />
+        ))}
+      </div>
+    </section>
+  )
+}

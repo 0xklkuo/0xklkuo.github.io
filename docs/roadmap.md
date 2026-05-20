@@ -41,14 +41,16 @@
 
 ### Deliverables
 
-- Rebuild blog listing and post pages.
+- Rebuild blog listing, tag archive, and post pages.
 - Reuse existing Markdown blog content.
-- Preserve post URLs where practical.
+- Preserve post URLs where practical, including locale-root post detail routes.
+- Restore estimated reading time and tag browsing.
+- Harden canonical, Open Graph, and locale-alternate behavior for the rebuilt routes.
 
 ### Definition of Done
 
 - Blog content renders cleanly.
-- Metadata and sitemap behavior match the rebuilt route structure.
+- Metadata, sitemap behavior, reading time, tag archives, and locale-aware alternate links match the rebuilt route structure.
 
 ## Milestone 4
 

@@ -1,0 +1,77 @@
+---
+import { getBlogTagPath, getBlogTagSlug } from '../../lib/blog';
+import type { Locale } from '../../lib/i18n';
+
+interface Props {
+  tags: string[];
+  locale?: Locale;
+  className?: string;
+  activeTagSlug?: string;
+}
+
+const { tags, locale, className = '', activeTagSlug } = Astro.props;
+---
+
+{
+  tags.length > 0 && (
+    <ul class:list={['flex flex-wrap gap-2', className]} aria-label="Tags">
+      {tags.map((tag) => {
+        const tagSlug = getBlogTagSlug(tag);
+        const isActive = activeTagSlug === tagSlug;
+        const classes = [
+          'tag-link inline-flex rounded-full border px-3 py-1 text-xs transition no-underline',
+          isActive ? 'tag-link--active' : 'tag-link--default',
+        ];
+
+        return (
+          <li>
+            {locale ? (
+              <a
+                href={getBlogTagPath(locale, tag)}
+                class={classes.join(' ')}
+                data-active={isActive ? 'true' : 'false'}
+                aria-current={isActive ? 'page' : undefined}
+              >
+                #{tag}
+              </a>
+            ) : (
+              <span class={classes.join(' ')} data-active={isActive ? 'true' : 'false'}>
+                #{tag}
+              </span>
+            )}
+          </li>
+        );
+      })}
+    </ul>
+  )
+}
+
+<style>
+  .tag-link {
+    border-color: var(--border-muted);
+  }
+
+  .tag-link--default {
+    background: var(--surface-strong);
+    color: var(--color-default);
+  }
+
+  .tag-link--default:hover,
+  .tag-link--default:focus-visible {
+    border-color: var(--color-primary);
+    color: var(--color-heading);
+    background: var(--surface-soft);
+  }
+
+  .tag-link--active {
+    background: var(--color-primary);
+    color: var(--color-page);
+  }
+
+  .tag-link--active:hover,
+  .tag-link--active:focus-visible {
+    border-color: var(--color-primary);
+    background: var(--surface-strong);
+    color: var(--color-default);
+  }
+</style>

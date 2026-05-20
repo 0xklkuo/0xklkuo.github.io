@@ -4,18 +4,59 @@ import Header from '../components/site/Header.astro';
 import Footer from '../components/site/Footer.astro';
 import { type Locale } from '../lib/i18n';
 
+type AlternateLinks = Partial<Record<Locale, string>>;
+
 interface Props {
   locale: Locale;
   title?: string;
   description?: string;
   canonicalPath?: string;
+  author?: string;
+  alternatePathname?: string | null;
+  alternateLinks?: AlternateLinks | null;
+  openGraphType?: 'website' | 'article';
+  socialImage?: string;
+  socialImageAlt?: string;
+  keywords?: string[];
+  noindex?: boolean;
+  publishedTime?: Date;
+  modifiedTime?: Date;
 }
 
-const { locale, title, description, canonicalPath = Astro.url.pathname } = Astro.props;
+const {
+  locale,
+  title,
+  description,
+  canonicalPath = Astro.url.pathname,
+  author,
+  alternatePathname,
+  alternateLinks,
+  openGraphType,
+  socialImage,
+  socialImageAlt,
+  keywords,
+  noindex,
+  publishedTime,
+  modifiedTime,
+} = Astro.props;
 ---
 
-<BaseLayout locale={locale} title={title} description={description} canonicalPath={canonicalPath}>
-  <Header locale={locale} pathname={canonicalPath} />
+<BaseLayout
+  locale={locale}
+  title={title}
+  description={description}
+  canonicalPath={canonicalPath}
+  author={author}
+  alternateLinks={alternateLinks}
+  openGraphType={openGraphType}
+  socialImage={socialImage}
+  socialImageAlt={socialImageAlt}
+  keywords={keywords}
+  noindex={noindex}
+  publishedTime={publishedTime}
+  modifiedTime={modifiedTime}
+>
+  <Header locale={locale} pathname={canonicalPath} alternatePathname={alternatePathname} />
   <div class="flex-1 py-12">
     <slot />
   </div>

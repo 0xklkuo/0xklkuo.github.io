@@ -35,11 +35,11 @@ const content = siteContent[locale].home;
       <SocialLinks links={socialLinks} />
     </div>
 
-    <div class="rounded-[2rem] border border-(--border-muted) bg-(--surface-soft) p-4">
+    <div class="rounded-4xl border border-(--border-muted) bg-(--surface-soft) p-4">
       <Image
         src={ProfileImage}
         alt="KL KUO profile graphic"
-        class="h-full w-full rounded-[1.5rem] object-cover"
+        class="h-full w-full rounded-3xl object-cover"
         widths={[480, 720]}
         sizes="(min-width: 1024px) 32rem, 100vw"
       />
@@ -76,6 +76,12 @@ const content = siteContent[locale].home;
       <article class="rounded-[1.75rem] border border-(--border-muted) bg-(--surface-soft) p-6">
         <h2 class="font-heading text-3xl text-(--color-heading)">{content.writingTitle}</h2>
         <p class="mt-4 leading-8 text-(--color-default)">{content.writingBody}</p>
+        <a
+          href={getLocalizedPath(locale, 'blog')}
+          class="mt-6 inline-flex rounded-full border border-(--color-primary) px-4 py-2 no-underline transition hover:bg-(--color-primary)/10"
+        >
+          {content.writingAction}
+        </a>
       </article>
 
       <article class="rounded-[1.75rem] border border-(--border-muted) bg-(--surface-soft) p-6">

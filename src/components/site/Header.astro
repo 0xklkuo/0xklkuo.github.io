@@ -14,14 +14,18 @@ import ThemeToggle from './ThemeToggle.astro';
 interface Props {
   locale: Locale;
   pathname: string;
+  alternatePathname?: string | null;
 }
 
-const { locale, pathname } = Astro.props;
+const { locale, pathname, alternatePathname } = Astro.props;
 const nav = getPrimaryNavigation(locale);
 const labels = siteContent[locale].nav;
-const localeHref = getLocaleFromPathname(pathname)
-  ? getAlternatePathname(pathname, locale)
-  : getLocalizedPath(getAlternateLocale(locale));
+const localeHref =
+  alternatePathname === undefined
+    ? getLocaleFromPathname(pathname)
+      ? getAlternatePathname(pathname, locale)
+      : getLocalizedPath(getAlternateLocale(locale))
+    : alternatePathname;
 
 const isActive = (href: string): boolean => {
   if (href === `/${locale}/`) {
@@ -64,12 +68,16 @@ const isActive = (href: string): boolean => {
       </nav>
 
       <div class="flex items-center gap-3 text-sm">
-        <a
-          href={localeHref}
-          class="rounded-full border border-(--border-muted) px-3 py-1.5 no-underline transition hover:border-(--color-primary) hover:text-(--color-heading)"
-        >
-          {labels.switchLocale}
-        </a>
+        {
+          localeHref && (
+            <a
+              href={localeHref}
+              class="rounded-full border border-(--border-muted) px-3 py-1.5 no-underline transition hover:border-(--color-primary) hover:text-(--color-heading)"
+            >
+              {labels.switchLocale}
+            </a>
+          )
+        }
         <ThemeToggle lightLabel={labels.toggleThemeToDark} darkLabel={labels.toggleThemeToLight} />
       </div>
     </div>

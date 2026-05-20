@@ -22,6 +22,7 @@ type HomeFeature = {
 type HomeCopy = {
   nav: {
     home: string;
+    blog: string;
     about: string;
     privacy: string;
     terms: string;
@@ -41,8 +42,25 @@ type HomeCopy = {
     aboutAction: string;
     writingTitle: string;
     writingBody: string;
+    writingAction: string;
     legalTitle: string;
     legalBody: string;
+  };
+  blog: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    emptyTitle: string;
+    emptyBody: string;
+    readPost: string;
+    authorLabel: string;
+    publishedLabel: string;
+    updatedLabel: string;
+    minutesRead: string;
+    tagPageEyebrow: string;
+    tagPageTitlePrefix: string;
+    relatedTitle: string;
+    backToIndex: string;
   };
   footer: {
     rights: string;
@@ -60,6 +78,7 @@ export const siteContent: Record<Locale, HomeCopy> = {
   en: {
     nav: {
       home: 'Home',
+      blog: 'Blog',
       about: 'About',
       privacy: 'Privacy',
       terms: 'Terms',
@@ -95,12 +114,31 @@ export const siteContent: Record<Locale, HomeCopy> = {
       aboutBody:
         'Dad. Developer. And more. I write about clarity, focus, systems, and building an intentional life without drifting into finite games.',
       aboutAction: 'Read the full story',
-      writingTitle: 'Writing is coming back next',
+      writingTitle: 'Writing now has a static home again',
       writingBody:
-        'The blog content is preserved and will return in Milestone 3 with stable static routes and the existing slugs where practical.',
+        'The rebuilt blog keeps the route structure small, serves posts from the content collection, and preserves existing slugs where practical.',
+      writingAction: 'Browse the blog',
       legalTitle: 'Simple and explicit by design',
       legalBody:
         'This rebuild keeps the public site static-first and moves legal pages into plain MDX so the repository stays understandable.',
+    },
+    blog: {
+      eyebrow: 'Writing',
+      title: 'Blog',
+      description:
+        'Notes on clarity, focus, systems, and intentional living, now rebuilt from the static content collection.',
+      emptyTitle: 'More writing is on the way.',
+      emptyBody:
+        'The route is ready. New and restored posts can ship here without changing the blog architecture again.',
+      readPost: 'Read article',
+      authorLabel: 'Author',
+      publishedLabel: 'Published',
+      updatedLabel: 'Updated',
+      minutesRead: 'min read',
+      tagPageEyebrow: 'Tag',
+      tagPageTitlePrefix: 'Tag',
+      relatedTitle: 'Keep reading',
+      backToIndex: 'Back to blog',
     },
     footer: {
       rights: `© ${new Date().getFullYear()} ${site.name}. All rights reserved.`,
@@ -109,6 +147,7 @@ export const siteContent: Record<Locale, HomeCopy> = {
   zh: {
     nav: {
       home: '首頁',
+      blog: '文章',
       about: '關於',
       privacy: '隱私政策',
       terms: '使用條款',
@@ -140,11 +179,28 @@ export const siteContent: Record<Locale, HomeCopy> = {
       aboutBody:
         '父親、工程師，還有更多角色。我書寫清晰、專注、系統，以及如何在有限賽局之外打造有意識的人生。',
       aboutAction: '閱讀完整介紹',
-      writingTitle: '文章會在下一個里程碑回來',
-      writingBody: '既有文章內容已經保留，將在里程碑 3 以純靜態路由重建，並盡量沿用原本的 slug。',
+      writingTitle: '文章已經回到靜態站點裡',
+      writingBody: '重建後的文章列表與文章頁直接來自內容集合，並在可行時保留既有 slug。',
+      writingAction: '瀏覽文章',
       legalTitle: '刻意保持簡單與明確',
       legalBody:
         '這次重構讓公開網站維持靜態優先，並把法律頁面放回簡單的 MDX 檔案，讓整個專案更容易理解。',
+    },
+    blog: {
+      eyebrow: '文章',
+      title: '部落格',
+      description: '整理關於清晰、專注、系統，以及有意識生活的筆記，現在已改由靜態內容集合提供。',
+      emptyTitle: '更多文章正在整理中。',
+      emptyBody: '路由已經就緒，之後補回與新增文章都不需要再調整整體架構。',
+      readPost: '閱讀文章',
+      authorLabel: '作者',
+      publishedLabel: '發布',
+      updatedLabel: '更新',
+      minutesRead: '分鐘閱讀',
+      tagPageEyebrow: '標籤',
+      tagPageTitlePrefix: '標籤',
+      relatedTitle: '延伸閱讀',
+      backToIndex: '返回文章列表',
     },
     footer: {
       rights: `© ${new Date().getFullYear()} ${site.name}。保留所有權利。`,
@@ -157,6 +213,7 @@ export function getPrimaryNavigation(locale: Locale): Link[] {
 
   return [
     { href: getLocalizedPath(locale), label: labels.home },
+    { href: getLocalizedPath(locale, 'blog'), label: labels.blog },
     { href: getLocalizedPath(locale, 'about'), label: labels.about },
     { href: getLocalizedPath(locale, 'privacy'), label: labels.privacy },
     { href: getLocalizedPath(locale, 'terms'), label: labels.terms },

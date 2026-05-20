@@ -5,6 +5,7 @@ import { z } from 'zod';
 const postCollection = defineCollection({
   loader: glob({ base: './src/content/post', pattern: '**/*.md' }),
   schema: z.object({
+    author: z.string().optional(),
     title: z.string(),
     excerpt: z.string().optional(),
     description: z.string().optional(),
