@@ -5,8 +5,6 @@
 @import '@fontsource/lxgw-wenkai-tc/chinese-traditional.css';
 @import 'tailwindcss';
 
-@custom-variant dark (&:where(.dark, .dark *));
-
 :root {
   --color-page: #f9f9f9;
   --color-default: #1f1f1f;
@@ -69,6 +67,22 @@ a {
 
 a:hover {
   color: var(--color-primary);
+}
+
+.theme-toggle-icon {
+  display: inline-flex;
+}
+
+.theme-toggle-icon--dark {
+  display: none;
+}
+
+html.dark .theme-toggle-icon--light {
+  display: none;
+}
+
+html.dark .theme-toggle-icon--dark {
+  display: inline-flex;
 }
 
 ::selection {

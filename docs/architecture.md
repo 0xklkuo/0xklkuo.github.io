@@ -14,7 +14,9 @@
 - `src/lib/site-content.ts` stores localized shell copy, navigation labels, and social links.
 - `src/lib/blog.ts` normalizes content-collection entries into blog routes, tag routes, metadata, related-post inputs, and locale-switch behavior.
 - `src/lib/markdown.mjs` adds the build-time reading-time remark plugin.
-- `src/layouts/BaseLayout.astro` provides metadata, route-aware alternate locale links, global styles, and dark-mode bootstrapping.
+- `src/lib/analytics.ts` normalizes the production analytics configuration from public environment variables without binding the codebase to a specific provider.
+- `astro.config.mjs` declares the public analytics variables through Astro's built-in environment schema so validation and runtime usage stay aligned.
+- `src/layouts/BaseLayout.astro` provides metadata, route-aware alternate locale links, global styles, dark-mode bootstrapping, and analytics injection.
 - `src/layouts/SiteLayout.astro` composes the reusable shell.
 - `src/layouts/MarkdownPageLayout.astro` wraps MDX and Markdown pages in the same shell.
 - `src/components/site/Header.astro` and `src/components/site/Footer.astro` implement the shared locale-aware navigation.
@@ -66,4 +68,8 @@
 - Build target is static output only.
 - GitHub Pages is the deployment target.
 - `public/CNAME` pins the custom domain.
+- `public/.nojekyll` ensures GitHub Pages serves Astro asset folders without Jekyll processing.
 - `site` is set to `https://klkuo.guru` in Astro config for sitemap and canonical URL correctness.
+- `.github/workflows/deploy.yml` installs dependencies, runs `npm run validate`, uploads `dist/`, and deploys the artifact to GitHub Pages.
+- Analytics is injected only in production builds when the required public environment variables are present.
+- Local development stays free of third-party analytics scripts, and the provider can change without code-level renaming or hardcoded identifiers.

@@ -18,10 +18,10 @@ const { lightLabel, darkLabel } = Astro.props;
   title={lightLabel}
   class="inline-flex size-10 items-center justify-center rounded-full border border-(--border-muted) transition hover:border-(--color-primary) hover:text-(--color-heading)"
 >
-  <span class="dark:hidden">
+  <span class="theme-toggle-icon theme-toggle-icon--light">
     <Icon name="moon" class="size-5" />
   </span>
-  <span class="hidden dark:inline-flex">
+  <span class="theme-toggle-icon theme-toggle-icon--dark">
     <Icon name="sun" class="size-5" />
   </span>
   <span class="sr-only" data-theme-toggle-text>{lightLabel}</span>

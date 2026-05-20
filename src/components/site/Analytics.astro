@@ -1,0 +1,17 @@
+---
+import { resolveAnalyticsConfig } from '../../lib/analytics';
+
+const analytics = resolveAnalyticsConfig(import.meta.env);
+---
+
+{
+  analytics && (
+    <script
+      is:inline
+      defer
+      src={analytics.scriptUrl}
+      data-website-id={analytics.websiteId}
+      data-domains={analytics.domains}
+    />
+  )
+}

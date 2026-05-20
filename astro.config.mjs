@@ -1,7 +1,7 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { defineConfig } from 'astro/config';
+import { defineConfig, envField } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
@@ -23,6 +23,25 @@ export default defineConfig({
     routing: {
       prefixDefaultLocale: true,
       redirectToDefaultLocale: false,
+    },
+  },
+  env: {
+    schema: {
+      PUBLIC_ANALYTICS_SCRIPT_URL: envField.string({
+        context: 'client',
+        access: 'public',
+        optional: true,
+      }),
+      PUBLIC_ANALYTICS_WEBSITE_ID: envField.string({
+        context: 'client',
+        access: 'public',
+        optional: true,
+      }),
+      PUBLIC_ANALYTICS_DOMAINS: envField.string({
+        context: 'client',
+        access: 'public',
+        optional: true,
+      }),
     },
   },
   vite: {

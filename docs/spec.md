@@ -18,6 +18,8 @@ Refactor `klkuo.guru` into a minimal, pure static personal site that is easy to 
 - Existing blog slugs should be preserved when practical.
 - The blog index should live at `/[locale]/blog/`, while blog post detail pages should remain at `/[locale]/<slug>/` where practical to avoid breaking previous public URLs.
 - Tag archives should live at `/[locale]/tag/<tag>/`.
+- Web analytics provider details should stay out of source code and be loaded from public environment variables in production builds.
+- The analytics script should be injected into the document head only when the required public environment variables are present.
 - Blog locale switching and hreflang output should only point to translated sibling posts or translated tag archives when they exist. If a sibling translation does not exist, the UI should fall back to the locale blog index instead of linking to a 404 route.
 
 ## Goals
@@ -87,8 +89,8 @@ Refactor `klkuo.guru` into a minimal, pure static personal site that is easy to 
 
 ### Milestone 4: Analytics and Deployment
 
-- Umami is integrated cleanly.
-- GitHub Actions deploy the site to GitHub Pages.
+- Analytics is integrated cleanly and stays optional by configuration.
+- GitHub Actions deploy the site to GitHub Pages from the validated static build output.
 - The custom domain remains intact.
 
 ### Milestone 5: Hardening

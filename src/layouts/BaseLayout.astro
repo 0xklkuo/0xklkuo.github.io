@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 
+import Analytics from '../components/site/Analytics.astro';
 import {
   getLocaleFromPathname,
   getLocalizedPath,
@@ -173,6 +174,7 @@ const keywordContent = keywords.filter(Boolean).join(', ');
         media.addEventListener('change', () => applyTheme(getStoredTheme()));
       })();
     </script>
+    <Analytics />
   </head>
   <body class="min-h-screen bg-(--color-page) text-(--color-default) antialiased">
     <main class="mx-auto flex min-h-screen w-full max-w-6xl flex-col px-6 py-8 sm:px-8 lg:px-10">

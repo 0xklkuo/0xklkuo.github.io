@@ -1,13 +1,13 @@
 # Roadmap
 
-| Milestone | Scope                                                     | Estimated effort |
-| --------- | --------------------------------------------------------- | ---------------: |
-| 0         | Planning lock and explicit decision capture               |     2 to 4 hours |
-| 1         | Foundation reset, cleanup, tooling baseline, core docs    |    8 to 12 hours |
-| 2         | Site shell, locale navigation, dark mode, first MDX pages |    8 to 12 hours |
-| 3         | Blog rebuild, content rendering, SEO hardening            |    6 to 10 hours |
-| 4         | Umami integration and GitHub Pages deployment workflow    |     4 to 8 hours |
-| 5         | Final hardening, cleanup, and handoff                     |     4 to 6 hours |
+| Milestone | Scope                                                      | Estimated effort |
+| --------- | ---------------------------------------------------------- | ---------------: |
+| 0         | Planning lock and explicit decision capture                |     2 to 4 hours |
+| 1         | Foundation reset, cleanup, tooling baseline, core docs     |    8 to 12 hours |
+| 2         | Site shell, locale navigation, dark mode, first MDX pages  |    8 to 12 hours |
+| 3         | Blog rebuild, content rendering, SEO hardening             |    6 to 10 hours |
+| 4         | Analytics integration and GitHub Pages deployment workflow |     4 to 8 hours |
+| 5         | Final hardening, cleanup, and handoff                      |     4 to 6 hours |
 
 ## Milestone 1
 
@@ -56,8 +56,9 @@
 
 ### Deliverables
 
-- Add Umami integration.
+- Add analytics integration.
 - Add GitHub Pages deployment workflow.
+- Keep analytics production-only and optional by configuration.
 
 ### Definition of Done
 

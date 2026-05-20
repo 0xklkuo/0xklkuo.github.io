@@ -4,7 +4,7 @@ Minimal static personal site for KL KUO.
 
 ## Status
 
-Milestones 1, 2, and 3 are in place:
+Milestones 1, 2, 3, and 4 are in place:
 
 - AstroWind-era dynamic code has been removed.
 - The project now builds as a pure static Astro site.
@@ -13,6 +13,8 @@ Milestones 1, 2, and 3 are in place:
 - A reusable site shell now powers locale-aware home, blog, tag, and MDX pages.
 - Blog index routes render at `/[locale]/blog/`, while blog post routes keep the previous locale-root slug shape where practical, such as `/en/my-post/`.
 - Tag archives and estimated reading time are restored for the rebuilt blog.
+- The site can now inject a production web analytics script from environment variables.
+- GitHub Actions can now deploy the site to GitHub Pages.
 - Core decisions are documented before feature work continues.
 
 ## Core Decisions
@@ -24,6 +26,7 @@ Milestones 1, 2, and 3 are in place:
 - Keep the blog index at `/[locale]/blog/`, but keep blog post detail pages at `/[locale]/<slug>/` where practical to avoid breaking previous public URLs.
 - Restore tag archives at `/[locale]/tag/<tag>/`.
 - Keep locale switch behavior and hreflang links honest on blog posts and tag pages: only point to translated siblings when they exist, otherwise fall back to the locale blog index for navigation.
+- Keep web analytics provider details out of source code and load them from public environment variables in production builds.
 - Focus search optimization on SEO, not on-site search.
 - Keep the architecture intentionally small, static, and easy to maintain.
 
@@ -57,6 +60,12 @@ Milestones 1, 2, and 3 are in place:
 ## Deployment
 
 - `public/CNAME` is committed for the custom domain.
+- `public/.nojekyll` is committed so GitHub Pages serves Astro asset folders like `_astro/` without Jekyll interference.
 - `astro.config.mjs` uses `https://klkuo.guru` as the site URL.
 - `.github/workflows/ci.yml` runs validation on pushes to `main` and on pull requests.
-- A dedicated GitHub Pages deployment workflow will be finalized in a later milestone.
+- `.github/workflows/deploy.yml` validates, builds, uploads, and deploys the `dist/` output to GitHub Pages on pushes to `main` and by manual dispatch.
+- Production analytics is injected in the document head only when these public environment variables are set:
+  - `PUBLIC_ANALYTICS_SCRIPT_URL`
+  - `PUBLIC_ANALYTICS_WEBSITE_ID`
+  - `PUBLIC_ANALYTICS_DOMAINS`
+- These variables are declared in Astro's built-in environment schema in `astro.config.mjs` so validation and typing stay aligned with the deployment workflow.
