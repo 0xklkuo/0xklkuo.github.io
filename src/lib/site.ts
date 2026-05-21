@@ -23,9 +23,9 @@ export type Locale = keyof typeof localeMetadata;
 
 export const site = {
   name: 'KL KUO',
-  tagline: 'Harmonize what matters. Transurfing intended realities. Play own games.',
+  tagline: 'Harmonize. Master. Play.',
   description:
-    'Just a slash dad exploring nature and tech to play better games toward an optimal life.',
+    'A slash dad exploring nature and technology to build a better life under real constraints.',
   url: 'https://klkuo.guru',
   domain: 'klkuo.guru',
   email: 'hey@klkuo.guru',
