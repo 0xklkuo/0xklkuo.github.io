@@ -85,7 +85,6 @@ Reserved top-level slugs prevent blog posts from colliding with fixed site route
 
 - The current deployment target is GitHub Pages.
 - `public/CNAME` keeps the custom domain pinned.
-- `public/.nojekyll` prevents Jekyll from interfering with Astro asset folders.
 - `.github/workflows/ci.yml` validates pushes and pull requests.
 - `.github/workflows/deploy.yml` validates, builds, uploads, and deploys `dist/`.
 - Public analytics variables are declared in `astro.config.mjs` so local development, validation, and deployment stay aligned.

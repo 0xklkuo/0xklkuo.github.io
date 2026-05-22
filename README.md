@@ -45,14 +45,13 @@ Static-first personal site for KL KUO.
 
 1. In GitHub repository settings, keep Pages configured for GitHub Actions.
 2. Keep `public/CNAME` committed with `klkuo.guru`.
-3. Keep `public/.nojekyll` committed so GitHub Pages serves Astro asset folders correctly.
-4. If analytics should be enabled in production, add these repository variables:
+3. If analytics should be enabled in production, add these repository variables:
    - `PUBLIC_ANALYTICS_SCRIPT_URL`
    - `PUBLIC_ANALYTICS_WEBSITE_ID`
    - `PUBLIC_ANALYTICS_DOMAINS` (optional)
-5. Run `npm run validate` locally before pushing.
-6. Merge or push to `main` to trigger `.github/workflows/deploy.yml`.
-7. After deployment, verify `/`, `/en/`, `/zh/`, a blog post route, and the custom domain.
+4. Run `npm run validate` locally before pushing.
+5. Merge or push to `main` to trigger `.github/workflows/deploy.yml`.
+6. After deployment, verify `/`, `/en/`, `/zh/`, a blog post route, and the custom domain.
 
 ## Production Validation After Deploy
 
