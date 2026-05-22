@@ -16,42 +16,31 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Install, validate, build, and upload site
+        uses: withastro/action@v6
+        with:
+          node-version: 22
+          build-cmd: npm run validate
+        env:
+          PUBLIC_ANALYTICS_SCRIPT_URL: ${{ vars.PUBLIC_ANALYTICS_SCRIPT_URL }}
+          PUBLIC_ANALYTICS_WEBSITE_ID: ${{ vars.PUBLIC_ANALYTICS_WEBSITE_ID }}
+          PUBLIC_ANALYTICS_DOMAINS: ${{ vars.PUBLIC_ANALYTICS_DOMAINS }}
+
   deploy:
+    needs: build
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v5
-        with:
-          static_site_generator: astro
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Validate and build project
-        env:
-          PUBLIC_ANALYTICS_SCRIPT_URL: ${{ vars.PUBLIC_ANALYTICS_SCRIPT_URL }}
-          PUBLIC_ANALYTICS_WEBSITE_ID: ${{ vars.PUBLIC_ANALYTICS_WEBSITE_ID }}
-          PUBLIC_ANALYTICS_DOMAINS: ${{ vars.PUBLIC_ANALYTICS_DOMAINS }}
-        run: npm run validate
-
-      - name: Upload GitHub Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist
-
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
