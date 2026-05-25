@@ -1,0 +1,83 @@
+---
+import '../styles/global.css';
+
+import { getLocalizedPath, type Locale } from '../lib/i18n';
+import { site } from '../lib/site';
+
+interface Props {
+  locale: Locale;
+  title?: string;
+  description?: string;
+  canonicalPath?: string;
+}
+
+const {
+  locale,
+  title,
+  description = site.description,
+  canonicalPath = getLocalizedPath(locale),
+} = Astro.props;
+
+const pageTitle = title ? `${title} | ${site.name}` : site.name;
+const canonical = new URL(canonicalPath, site.url).toString();
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script is:inline>
+      (() => {
+        const storageKey = 'theme';
+        const root = document.documentElement;
+        const media = window.matchMedia('(prefers-color-scheme: dark)');
+
+        const getStoredTheme = () => window.localStorage.getItem(storageKey) ?? 'system';
+
+        const applyTheme = (theme) => {
+          const shouldUseDark = theme === 'dark' || (theme === 'system' && media.matches);
+
+          root.classList.toggle('dark', shouldUseDark);
+          root.dataset.theme = theme;
+        };
+
+        const registerToggle = () => {
+          const toggleButtons = document.querySelectorAll('[data-theme-toggle]');
+
+          for (const button of toggleButtons) {
+            button.addEventListener('click', () => {
+              const nextTheme = root.classList.contains('dark') ? 'light' : 'dark';
+              window.localStorage.setItem(storageKey, nextTheme);
+              applyTheme(nextTheme);
+            });
+          }
+        };
+
+        applyTheme(getStoredTheme());
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', registerToggle, {
+            once: true,
+          });
+        } else {
+          registerToggle();
+        }
+
+        media.addEventListener('change', () => applyTheme(getStoredTheme()));
+      })();
+    </script>
+  </head>
+  <body
+    class="min-h-screen bg-white text-slate-950 antialiased dark:bg-slate-950 dark:text-slate-100"
+  >
+    <main class="mx-auto flex min-h-screen w-full max-w-4xl flex-col px-6 py-12 sm:px-8">
+      <slot />
+    </main>
+  </body>
+</html>
