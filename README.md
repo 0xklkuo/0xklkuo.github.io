@@ -6,9 +6,9 @@ Static-first personal site for KL KUO.
 
 - A localized public site at `/en/` and `/zh/`
 - A blog generated from Astro content collections
-- Shared layouts, locale-aware routing helpers, and markdown-backed full-page content
+- Shared layouts, locale-aware routing helpers, and markdown/MDX full-page content
 - Optional production analytics configured only through public environment variables
-- GitHub Actions workflows for validation and GitHub Pages deployment
+- GitHub Actions workflows for validation and GitHub Pages deployment via the official Astro action
 
 ## Working Principles
 
@@ -50,7 +50,7 @@ Static-first personal site for KL KUO.
    - `PUBLIC_ANALYTICS_WEBSITE_ID`
    - `PUBLIC_ANALYTICS_DOMAINS` (optional)
 4. Run `npm run validate` locally before pushing.
-5. Merge or push to `main` to trigger `.github/workflows/deploy.yml`.
+5. Merge or push to `main` to trigger `.github/workflows/deploy.yml`, which runs `withastro/action@v6` and `actions/deploy-pages@v5`.
 6. After deployment, verify `/`, `/en/`, `/zh/`, a blog post route, and the custom domain.
 
 ## Production Validation After Deploy

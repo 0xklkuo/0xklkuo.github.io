@@ -15,7 +15,7 @@
 - `src/lib/site.ts` stores site-wide constants and locale metadata.
 - `src/lib/i18n.ts` handles locale validation, pathname normalization, locale switching, and localized route building.
 - Locale-specific presentation copy lives in `src/lib/site-content.ts`.
-- Markdown-backed full-page content remains readable in `src/pages/en/` and `src/pages/zh/`, with `about` in MDX and `privacy` / `terms` in Markdown.
+- Locale-specific full-page content remains readable in `src/pages/en/` and `src/pages/zh/`, with `about` in MDX and `privacy` / `terms` in Markdown.
 
 ### 2. Layout and Shared Shell
 
@@ -86,7 +86,7 @@ Reserved top-level slugs prevent blog posts from colliding with fixed site route
 - The current deployment target is GitHub Pages.
 - `public/CNAME` keeps the custom domain pinned.
 - `.github/workflows/ci.yml` validates pushes and pull requests.
-- `.github/workflows/deploy.yml` validates, builds, uploads, and deploys `dist/`.
+- `.github/workflows/deploy.yml` uses `withastro/action@v6` to install dependencies, run `npm run validate`, build the site, upload the Pages artifact, and then publish with `actions/deploy-pages@v5`.
 - Public analytics variables are declared in `astro.config.mjs` so local development, validation, and deployment stay aligned.
 
 ## Change Guidance

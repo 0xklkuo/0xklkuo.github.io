@@ -15,7 +15,7 @@
 
 This final pass closes the rewrite by:
 
-- consolidating duplicated locale routes into shared locale-aware page implementations
+- consolidating duplicated locale routes where it improved maintainability while keeping long-form locale pages readable as Markdown or MDX
 - enabling Astro opt-in prefetching on high-intent internal links
 - tightening behavior-focused tests
 - updating docs and policy pages so they reflect shipped behavior and remain open to future growth
