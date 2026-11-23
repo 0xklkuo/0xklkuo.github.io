@@ -1,4 +1,6 @@
 ---
+import type { ImageMetadata } from 'astro';
+
 import SiteLayout from './SiteLayout.astro';
 import { type Locale } from '../lib/i18n';
 import { localeMetadata } from '../lib/site';
@@ -8,10 +10,26 @@ interface Frontmatter {
   title: string;
   description?: string;
   subtitle?: string;
+  socialImage?: string;
+  socialImageAlt?: string;
 }
 
 const { frontmatter } = Astro.props;
-const { locale, title, description, subtitle } = frontmatter as Frontmatter;
+const {
+  locale,
+  title,
+  description,
+  subtitle,
+  socialImage: socialImagePath,
+  socialImageAlt,
+} = frontmatter as Frontmatter;
+const images = import.meta.glob<ImageMetadata>('../assets/images/**/*.{png,jpg,jpeg,webp,avif}', {
+  eager: true,
+  import: 'default',
+});
+const socialImage = socialImagePath?.startsWith('~/assets/')
+  ? images[socialImagePath.replace('~/', '../')]?.src
+  : socialImagePath;
 ---
 
 <SiteLayout
@@ -19,6 +37,8 @@ const { locale, title, description, subtitle } = frontmatter as Frontmatter;
   title={title}
   description={description}
   canonicalPath={Astro.url.pathname}
+  socialImage={socialImage}
+  socialImageAlt={socialImageAlt}
 >
   <article class="content-body mx-auto w-full max-w-3xl">
     <header class="mb-10 space-y-4 border-b border-(--border-muted) pb-8">

@@ -21,14 +21,14 @@
 
 - `src/layouts/BaseLayout.astro` owns global metadata, canonical and alternate links, global theme bootstrapping, and analytics injection.
 - `src/layouts/SiteLayout.astro` composes the shared shell.
-- `src/layouts/MarkdownPageLayout.astro` keeps locale-specific MDX pages aligned with the same shell.
+- `src/layouts/MarkdownPageLayout.astro` keeps locale-specific Markdown/MDX pages aligned with the same shell and resolves optional `socialImage` frontmatter (`~/assets/images/...` or a public image URL) for sharing metadata.
 - `src/components/site/` contains reusable navigation, footer, theme toggle, icons, analytics, and social links.
 
 ### 3. Content and Blog Model
 
 - `src/content/post/` stores blog content.
 - `src/content.config.ts` defines the blog collection schema.
-- `src/lib/markdown.mjs` adds build-time reading time.
+- `src/lib/markdown.mjs` adds build-time reading time and opens external HTTP(S) links in Markdown/MDX in a new tab with `noopener noreferrer`, leaving same-origin and non-web links unchanged.
 - `src/lib/blog.ts` normalizes entries into blog posts, tag archives, alternate links, and related-post inputs.
 
 ### 4. Route Layer

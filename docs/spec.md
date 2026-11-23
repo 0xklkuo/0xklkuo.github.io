@@ -39,6 +39,8 @@ Keep `klkuo.guru` as a small, static-first personal site that is easy to underst
 - Dark mode
 - Clear locale switching with safe fallbacks when a translated sibling route does not exist
 - Accessible keyboard-friendly navigation
+- Secondary-colored bullet markers in content lists
+- External web links open in a new tab; internal links stay in the current tab
 - Astro opt-in prefetching on high-intent internal links
 - Minimal client-side behavior beyond theme preference and optional analytics
 
@@ -46,7 +48,7 @@ Keep `klkuo.guru` as a small, static-first personal site that is easy to underst
 
 - Canonical URLs
 - Route-aware hreflang output
-- Per-page metadata
+- Per-page metadata, including a shared social-preview image for both About locales
 - `robots.txt`
 - Sitemap generation
 - Semantic content structure

@@ -6,16 +6,18 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
-import { readingTimeRemarkPlugin } from './src/lib/markdown.mjs';
+import { externalLinksRehypePlugin, readingTimeRemarkPlugin } from './src/lib/markdown.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const siteUrl = 'https://klkuo.guru';
 
 export default defineConfig({
-  site: 'https://klkuo.guru',
+  site: siteUrl,
   output: 'static',
   integrations: [mdx(), sitemap()],
   markdown: {
     remarkPlugins: [readingTimeRemarkPlugin],
+    rehypePlugins: [[externalLinksRehypePlugin, { site: siteUrl }]],
   },
   i18n: {
     defaultLocale: 'en',
