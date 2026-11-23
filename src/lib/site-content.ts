@@ -91,7 +91,7 @@ export const siteContent: Record<Locale, LocaleContent> = {
       title: 'Harmonize. Master. Play.',
       quote: 'There is but one infinite game. — James Carse',
       description:
-        'A slash dad exploring nature and technology to build a better life under real constraints.',
+        'A slash dad of two homeschooled kids, exploring art, nature, and tech to play games that enhance life.',
       profileImageAlt: 'KL KUO profile graphic',
       featureTitle: 'Three core moves',
       features: [
@@ -161,7 +161,7 @@ export const siteContent: Record<Locale, LocaleContent> = {
       tagline: '無限玩家',
       title: '平衡。掌握。暢玩。',
       quote: 'There is but one infinite game. — James Carse',
-      description: '一個在真實限制下，探索自然與科技、把人生活得更好的斜槓老爸。',
+      description: '只是個有兩位自學孩子，探索藝術、自然與科技、把人生玩得更好的斜槓老爸。',
       profileImageAlt: 'KL KUO 個人主視覺',
       featureTitle: '三個核心動作',
       features: [
