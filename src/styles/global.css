@@ -93,6 +93,11 @@ html.dark .theme-toggle-icon--dark {
   line-height: 1.85;
 }
 
+.content-body a:where(:not(.no-underline)) {
+  text-decoration-line: underline;
+  text-decoration-color: var(--color-primary);
+}
+
 .content-body > * + * {
   margin-top: 1.25rem;
 }
